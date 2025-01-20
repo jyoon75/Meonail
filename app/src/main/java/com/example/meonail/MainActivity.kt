@@ -1,5 +1,6 @@
 package com.example.meonail
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -31,5 +32,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration) //액션 바 이름 설정
         navView.setupWithNavController(navController)
+
+
+        // 후기 작성 버튼 클릭 이벤트
+        binding.btnRecordRegist.setOnClickListener {
+            // RecordRegistActivity로 이동
+            val intent = Intent(this, RecordRegistActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
