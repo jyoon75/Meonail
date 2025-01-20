@@ -16,4 +16,15 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+
+    <!-- 드롭다운 메뉴 항목 -->
+    <string-array name="category_array">
+        <item>영화</item>
+        <item>드라마</item>
+        <item>책</item>
+        <item>공연</item>
+        <item>음악</item>
+    </string-array>
 </resources>
+
