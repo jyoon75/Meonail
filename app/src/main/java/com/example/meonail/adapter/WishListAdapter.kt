@@ -41,6 +41,7 @@ class WishListAdapter : RecyclerView.Adapter<WishListAdapter.WishViewHolder>() {
 
             // ✅ 클릭 시 이벤트 실행
             itemView.setOnClickListener {
+                Log.d("WishListAdapter", "아이템 클릭됨: ${item.title}") // 🔹 로그 확인
                 clickListener?.invoke(item)
             }
         }

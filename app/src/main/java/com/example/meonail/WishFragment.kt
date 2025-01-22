@@ -1,5 +1,6 @@
 package com.example.meonail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,15 +36,10 @@ class WishFragment : Fragment() {
 
         // ✅ 클릭 이벤트 추가
         wishListAdapter.setOnItemClickListener { wishItem ->
-            val fragment = ImageCreationFragment()
-            val bundle = Bundle()
-            bundle.putParcelable("wishItem", wishItem) // ✅ WishItem 전달
-            fragment.arguments = bundle
-
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_image_creation_container, fragment) // ✅ 🔹 여기에 맞는 ID로 변경
-                .addToBackStack(null)
-                .commit()
+            val intent = Intent(requireContext(), WishDetailActivity::class.java).apply {
+                putExtra("wishItem", wishItem)
+            }
+            startActivity(intent) // ✅ 새로운 화면(액티비티)으로 이동
         }
 
         return view
