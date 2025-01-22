@@ -17,6 +17,7 @@ import com.example.meonail.model.WishItem
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import androidx.core.content.FileProvider
 
 class ImageCreationActivity : AppCompatActivity() {
 
@@ -65,6 +66,7 @@ class ImageCreationActivity : AppCompatActivity() {
             }
         }
 
+        // 🔄 공유 버튼 클릭 시
         // 🔄 공유 버튼 클릭 시
         btnShare.setOnClickListener {
             generatedBitmap?.let {
@@ -123,7 +125,6 @@ class ImageCreationActivity : AppCompatActivity() {
         return finalBitmap
     }
 
-    // 💾 이미지 저장 함수 (공용 저장소 사용 + 갤러리 반영)
     // 💾 이미지 저장 함수 (갤러리에 자동 반영)
     private fun saveImageToGallery(bitmap: Bitmap): Uri? {
         val filename = "polaroid_${System.currentTimeMillis()}.png"
