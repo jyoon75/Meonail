@@ -1,59 +1,85 @@
 package com.example.meonail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.meonail.R
+import com.example.meonail.api.RetrofitClient
+import com.example.meonail.model.WishItem
+import com.example.meonail.model.WishListResponse
+import com.example.meonail.adapter.WishListAdapter
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [WishFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class WishFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var rvWishList: RecyclerView
+    private val wishListAdapter = WishListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wish, container, false)
+    ): View {
+        val view = inflater.inflate(R.layout.fragment_wish, container, false)
+        rvWishList = view.findViewById(R.id.rvWishList)
+        rvWishList.layoutManager = LinearLayoutManager(requireContext())
+        rvWishList.adapter = wishListAdapter
+
+        fetchWishListData()
+
+        // ✅ 클릭 이벤트 추가
+        wishListAdapter.setOnItemClickListener { wishItem ->
+            val fragment = ImageCreationFragment()
+            val bundle = Bundle()
+            bundle.putParcelable("wishItem", wishItem) // ✅ WishItem 전달
+            fragment.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_image_creation_container, fragment) // ✅ 🔹 여기에 맞는 ID로 변경
+                .addToBackStack(null)
+                .commit()
+        }
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WishFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WishFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun fetchWishListData() {
+        val apiService = RetrofitClient.instance
+
+        lifecycleScope.launch {
+            try {
+                val response: Response<WishListResponse> = apiService.getWishListData(
+                    "607f1cc83e054d7aadd6ad4af6d00e36",
+                    "json",
+                    1,
+                    10
+                )
+
+                Log.d("API_CALL", "응답 코드: ${response.code()}")
+                Log.d("API_CALL", "응답 바디: ${response.body()}")
+
+                if (response.isSuccessful) {
+                    response.body()?.eventList?.flatMap { it.events ?: emptyList() }?.let { data ->
+                        Log.d("API_RESPONSE", "Parsed Data: $data")
+
+                        Log.d("WishFragment", "RecyclerView 아이템 개수: ${wishListAdapter.itemCount}")
+
+
+                        wishListAdapter.updateData(data)
+                        rvWishList.post { wishListAdapter.notifyDataSetChanged() } // 🔥 RecyclerView 갱신
+                    }
+                } else {
+                    Log.e("API_ERROR", "오류 코드: ${response.code()}, 메시지: ${response.errorBody()?.string()}")
                 }
+            } catch (e: Exception) {
+                Log.e("WishFragment", "네트워크 오류 발생", e)
             }
+        }
     }
 }
