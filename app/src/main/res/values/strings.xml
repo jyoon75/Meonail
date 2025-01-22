@@ -1,12 +1,28 @@
 <resources>
     <string name="app_name">Meonail</string>
+    <string name="hello_blank_fragment">화면</string>
+
+    <!-- 바텀 네비게이션 바 -->
     <string name="title_calendar">캘린더</string>
     <string name="title_memory">추억</string>
     <string name="title_home">홈</string>
     <string name="title_wish">위시</string>
     <string name="title_mypage">마이페이지</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- 캘린더 -->
+    <string name="calrender_day">요일</string>
+    <string name="_0">날짜</string>
+
+    <!-- 드롭다운 메뉴 항목 -->
+    <string-array name="category_array">
+        <item>영화</item>
+        <item>드라마</item>
+        <item>책</item>
+        <item>공연</item>
+        <item>음악</item>
+    </string-array>
+
+    <!-- 로그인(기본 생성된 것으로 필요 시 조정해주세요) -->
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -17,3 +33,4 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 </resources>
+

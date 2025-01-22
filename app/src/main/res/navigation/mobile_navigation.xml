@@ -35,4 +35,22 @@
         android:label="@string/title_mypage"
         tools:layout="@layout/fragment_mypage" />
 
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.example.meonail.ui.home.HomeFragment"
+        android:label="홈"
+        tools:layout="@layout/fragment_home" >
+        <!-- 후기 작성 화면으로 이동하는 액션 -->
+        <action
+            android:id="@+id/action_home_to_record"
+            app:destination="@id/review_activity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/review_activity"
+        android:name="com.example.meonail.RecordRegistActivity"
+        android:label="후기 작성"
+        tools:layout="@layout/activity_record_regist" />
+
 </navigation>
