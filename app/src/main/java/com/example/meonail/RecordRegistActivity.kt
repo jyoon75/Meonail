@@ -1,17 +1,21 @@
 package com.example.meonail
 
+import RecordDatabaseHelper
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RatingBar
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,27 +25,29 @@ import java.util.*
 
 class RecordRegistActivity : AppCompatActivity() {
 
+    private lateinit var dbHelper: RecordDatabaseHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_regist)
 
         // 날짜 선택
-        val editTextDate = findViewById<EditText>(R.id.editTextDate)
-        editTextDate.setOnClickListener {
-            showDatePickerDialog(editTextDate)
+        val recordEditTextDate = findViewById<EditText>(R.id.editTextDate)
+        recordEditTextDate.setOnClickListener {
+            showDatePickerDialog(recordEditTextDate)
         }
 
 
         // 태그 추가
         val addTagButton = findViewById<Button>(R.id.btnRecordAddTag)
-        val tagContainer = findViewById<LinearLayout>(R.id.tagContainer)
+        val recordTagContainer = findViewById<LinearLayout>(R.id.tagContainer)
         addTagButton.setOnClickListener {
-            showAddTagDialog(tagContainer)
+            showAddTagDialog(recordTagContainer)
         }
 
 
         // 이미지 추가
-        val imageContainer = findViewById<LinearLayout>(R.id.imageContainer)
+        val recordImageContainer = findViewById<LinearLayout>(R.id.imageContainer)
         val addImageButton = findViewById<Button>(R.id.btnAddImage)
         addImageButton.setOnClickListener {
             openGallery()
@@ -58,14 +64,43 @@ class RecordRegistActivity : AppCompatActivity() {
                     // 여러 개 선택된 경우
                     for (i in 0 until clipData.itemCount) {
                         val uri = clipData.getItemAt(i).uri
-                        addImageToContainer(imageContainer, uri)
+                        addImageToContainer(recordImageContainer, uri)
                     }
                 } else if (selectedImageUri != null) {
                     // 한 개만 선택된 경우
-                    addImageToContainer(imageContainer, selectedImageUri)
+                    addImageToContainer(recordImageContainer, selectedImageUri)
                 }
             }
         }
+
+
+
+        // DB 저장
+        dbHelper = RecordDatabaseHelper(this)
+
+        val spinnerCategory = findViewById<Spinner>(R.id.spinnerCategory)
+        val editTextTitle = findViewById<EditText>(R.id.editTextTitle)
+        val editTextDate = findViewById<EditText>(R.id.editTextDate)
+        val ratingBar = findViewById<RatingBar>(R.id.ratingBar)
+        val tagContainer = findViewById<LinearLayout>(R.id.tagContainer)
+        val imageContainer = findViewById<LinearLayout>(R.id.imageContainer)
+        val editTextNote = findViewById<EditText>(R.id.editTextNote)
+        val checkBoxPrivate = findViewById<CheckBox>(R.id.checkBoxPrivate)
+        val saveButton = findViewById<Button>(R.id.btnRecordSave)
+
+        saveButton.setOnClickListener {
+            saveRecordToDatabase(
+                spinnerCategory.selectedItem.toString(),
+                editTextTitle.text.toString().trim(),
+                editTextDate.text.toString().trim(),
+                ratingBar.rating,
+                getTagsFromContainer(tagContainer),
+                getImagesFromContainer(imageContainer),
+                editTextNote.text.toString().trim(),
+                checkBoxPrivate.isChecked
+            )
+        }
+
     }
 
     // 날짜 선택하는 창
@@ -171,6 +206,79 @@ class RecordRegistActivity : AppCompatActivity() {
         imageLayout.addView(imageView)
         imageLayout.addView(deleteButton)
         container.addView(imageLayout)
+    }
+
+
+
+    // DB 저장
+    private fun saveRecordToDatabase(
+        category: String,
+        title: String,
+        date: String,
+        rating: Float,
+        tags: String,
+        images: String,
+        note: String,
+        isPrivate: Boolean
+    ) {
+        if (title.isEmpty() || date.isEmpty()) {
+            Toast.makeText(this, "제목과 날짜는 필수 입력 항목입니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val values = ContentValues().apply {
+            put(RecordDatabaseHelper.COLUMN_CATEGORY, category)
+            put(RecordDatabaseHelper.COLUMN_TITLE, title)
+            put(RecordDatabaseHelper.COLUMN_DATE, date)
+            put(RecordDatabaseHelper.COLUMN_RATING, rating)
+            put(RecordDatabaseHelper.COLUMN_TAGS, tags)
+            put(RecordDatabaseHelper.COLUMN_IMAGES, images)
+            put(RecordDatabaseHelper.COLUMN_NOTE, note)
+            put(RecordDatabaseHelper.COLUMN_PRIVATE, if (isPrivate) 1 else 0)
+        }
+
+        val id = dbHelper.insertRecord(values)
+        if (id > 0) {
+            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+            clearInputs()
+        } else {
+            Toast.makeText(this, "저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun getTagsFromContainer(container: LinearLayout): String {
+        val tags = mutableListOf<String>()
+        for (i in 0 until container.childCount) {
+            val tagView = container.getChildAt(i) as? TextView
+            tagView?.text?.let {
+                tags.add(it.toString().removePrefix("#"))
+            }
+        }
+        return tags.joinToString(",")
+    }
+
+
+    private fun getImagesFromContainer(container: LinearLayout): String {
+        val imageUris = mutableListOf<String>()
+        for (i in 0 until container.childCount) {
+            val frameLayout = container.getChildAt(i) as? FrameLayout
+            val imageView = frameLayout?.getChildAt(0) as? ImageView
+            imageView?.tag?.let { uri ->
+                imageUris.add(uri.toString())
+            }
+        }
+        return imageUris.joinToString(",")
+    }
+
+    private fun clearInputs() {
+        findViewById<EditText>(R.id.editTextTitle).text.clear()
+        findViewById<EditText>(R.id.editTextDate).text.clear()
+        findViewById<RatingBar>(R.id.ratingBar).rating = 0f
+        findViewById<LinearLayout>(R.id.tagContainer).removeAllViews()
+        findViewById<LinearLayout>(R.id.imageContainer).removeAllViews()
+        findViewById<EditText>(R.id.editTextNote).text.clear()
+        findViewById<CheckBox>(R.id.checkBoxPrivate).isChecked = false
     }
 
 }
