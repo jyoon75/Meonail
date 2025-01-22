@@ -22,6 +22,9 @@ class WishDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wish_detail) // ✅ 새로운 레이아웃 설정
 
+        // ✅ 액션바에 뒤로 가기 버튼 추가
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         imgPoster = findViewById(R.id.imgWishPoster)
         txtTitle = findViewById(R.id.txtWishTitle)
         txtCategory = findViewById(R.id.txtWishCategory)
@@ -39,16 +42,13 @@ class WishDetailActivity : AppCompatActivity() {
             txtFee.text = "참가비: ${item.participationFee ?: "무료"}"
 
             Glide.with(this).load(item.imageUrl).into(imgPoster)
-/*
-            // ✅ 버튼 클릭 시 ImageCreationActivity 실행
-            btnCreateImage.setOnClickListener {
-                val intent = Intent(this, ImageCreationActivity::class.java).apply {
-                    putExtra("wishItem", item)
-                }
-                startActivity(intent)
-            }
-            */
 
         }
+    }
+
+    // ✅ 뒤로 가기 버튼 클릭 시 실행
+    override fun onSupportNavigateUp(): Boolean {
+        finish() // 현재 액티비티 종료
+        return true
     }
 }
