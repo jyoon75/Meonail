@@ -7,28 +7,12 @@
     android:orientation="vertical"
     tools:context=".CalendarFragment">
 
-    <!-- 요일 리스트 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_weeklist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:numColumns="7"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:itemCount="7"
-        tools:listitem="@layout/item_week" />
-
-    <!-- 커스텀 캘린더뷰 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:numColumns="7"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:itemCount="31"
-        tools:listitem="@layout/item_day" />
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:mcv_tileHeight="70dp"
+        tools:ignore="MissingConstraints" />
 
 </LinearLayout>
