@@ -187,6 +187,7 @@ class RecordRegistActivity : AppCompatActivity() {
             layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
             setImageURI(imageUri)
             scaleType = ImageView.ScaleType.CENTER_CROP
+            tag = imageUri.toString() // URI를 태그로 설정
         }
 
         // 삭제 버튼
@@ -265,10 +266,10 @@ class RecordRegistActivity : AppCompatActivity() {
             val frameLayout = container.getChildAt(i) as? FrameLayout
             val imageView = frameLayout?.getChildAt(0) as? ImageView
             imageView?.tag?.let { uri ->
-                imageUris.add(uri.toString())
+                imageUris.add(uri.toString()) // 태그에서 URI 추출
             }
         }
-        return imageUris.joinToString(",")
+        return imageUris.joinToString(",") // 쉼표로 구분된 URI 문자열 반환
     }
 
     private fun clearInputs() {

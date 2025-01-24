@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         // 후기 작성 버튼 클릭 이벤트
         binding.btnRecordRegist.setOnClickListener {
-            if(checkPermission()){ // 사진 권한 참일 때
+            if(!checkPermission()){ // 사진 권한 참일 때
                 // RecordRegistActivity로 이동
                 val intent = Intent(this, RecordRegistActivity::class.java)
                 startActivity(intent)
@@ -75,10 +75,10 @@ class MainActivity : AppCompatActivity() {
                     arrayOf(readImagePermissioin),
                     REQUEST_READ_EXTERNAL_STORAGE)
             }
+            return false
         } else {
             // 권한이 부여되었다면 참 리턴
             return true
         }
-        return false
     }
 }

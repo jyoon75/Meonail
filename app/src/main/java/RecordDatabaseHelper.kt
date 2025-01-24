@@ -47,4 +47,34 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         val db = writableDatabase
         return db.insert(TABLE_NAME, null, record)
     }
+
+
+
+
+    // 데이터 가져오기
+    fun getAllRecords(): List<ContentValues> {
+        val records = mutableListOf<ContentValues>()
+        val db = readableDatabase
+        val cursor = db.query(TABLE_NAME, null, null, null, null, null, "$COLUMN_DATE DESC") // 날짜 내림차순
+
+        if (cursor.moveToFirst()) {
+            do {
+                val record = ContentValues().apply {
+                    put(COLUMN_ID, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
+                    put(COLUMN_CATEGORY, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)))
+                    put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)))
+                    put(COLUMN_DATE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)))
+                    put(COLUMN_RATING, cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_RATING)))
+                    put(COLUMN_TAGS, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TAGS)))
+                    put(COLUMN_IMAGES, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGES)))
+                    put(COLUMN_NOTE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOTE)))
+                    put(COLUMN_PRIVATE, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRIVATE)))
+                }
+                records.add(record)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return records
+    }
+
 }

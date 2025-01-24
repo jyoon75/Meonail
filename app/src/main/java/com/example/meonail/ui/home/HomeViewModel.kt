@@ -1,13 +1,13 @@
-package com.example.meonail.ui.home
-
+import android.content.ContentValues
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class HomeViewModel : ViewModel() {
+    private val _records = MutableLiveData<List<ContentValues>>()
+    val records: LiveData<List<ContentValues>> get() = _records
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    fun loadRecords(dbHelper: RecordDatabaseHelper) {
+        _records.value = dbHelper.getAllRecords()
     }
-    val text: LiveData<String> = _text
 }
