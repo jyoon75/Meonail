@@ -21,7 +21,7 @@ import retrofit2.Response
 class WishFragment : Fragment() {
 
     private lateinit var rvWishList: RecyclerView
-    private val wishListAdapter = WishListAdapter()
+    private val wishListAdapter by lazy { WishListAdapter(requireContext()) } // ✅ 바로 초기화
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
