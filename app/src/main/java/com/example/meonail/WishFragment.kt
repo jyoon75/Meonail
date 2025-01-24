@@ -73,7 +73,7 @@ class WishFragment : Fragment() {
                 )
 
                 // ✅ API 요청 로그 추가 (API 주소 확인용)
-                Log.d("API_REQUEST", "요청 URL: http://api.kcisa.kr/openapi/CNV_060/request?serviceKey=5f2a4f19-de50-4c12-963c-bbb1e93138c4&pageNo=1&numOfRows=20&dtype=전시&title=전시")
+                Log.d("API_REQUEST", "요청 URL: http://api.kcisa.kr/openapi/CNV_060/request?serviceKey=5f2a4f19-de50-4c12-963c-bbb1e93138c4&pageNo=1&numOfRows=10&dtype=전시&title=전시")
 
                 // ✅ API 응답이 정상인지 확인
                 if (response.isSuccessful) {

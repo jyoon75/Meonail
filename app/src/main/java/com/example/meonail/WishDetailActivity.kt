@@ -28,9 +28,7 @@ class WishDetailActivity : AppCompatActivity() {
 
         imgPoster = findViewById(R.id.imgWishPoster)
         txtTitle = findViewById(R.id.txtWishTitle)
-        txtType = findViewById(R.id.txtWishType)
         txtPeriod = findViewById(R.id.txtWishPeriod)
-        txtLocation = findViewById(R.id.txtWishLocation)
         txtContact = findViewById(R.id.txtWishContact)
         btnCreateImage = findViewById(R.id.btnCreateImage)
 
