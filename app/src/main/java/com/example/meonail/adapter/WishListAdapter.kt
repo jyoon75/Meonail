@@ -15,14 +15,16 @@ import com.example.meonail.model.WishItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class WishListAdapter(private val context: Context) : RecyclerView.Adapter<WishListAdapter.WishViewHolder>() {
+class WishListAdapter(
+    private val context: Context,
+    private val isWishList: Boolean,
+    private var onWishRemovedListener: ((WishItem) -> Unit)? = null // ✅ 여기에만 선언
+) : RecyclerView.Adapter<WishListAdapter.WishViewHolder>() {
 
     private val items = mutableListOf<WishItem>()
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("WishPrefs", Context.MODE_PRIVATE)
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("WishPrefs", Context.MODE_PRIVATE)
     private val gson = Gson()
-    private val favoriteItems = loadFavorites().toMutableSet() // 🔥 찜한 항목을 저장하는 Set
-
-    private var onItemClickListener: ((WishItem) -> Unit)? = null
 
     fun updateData(newItems: List<WishItem>) {
         items.clear()
@@ -30,8 +32,8 @@ class WishListAdapter(private val context: Context) : RecyclerView.Adapter<WishL
         notifyDataSetChanged()
     }
 
-    fun setOnItemClickListener(listener: (WishItem) -> Unit) {
-        onItemClickListener = listener
+    fun setOnWishRemovedListener(listener: (WishItem) -> Unit) {
+        onWishRemovedListener = listener
     }
 
     inner class WishViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,36 +41,33 @@ class WishListAdapter(private val context: Context) : RecyclerView.Adapter<WishL
         private val txtTitle: TextView = view.findViewById(R.id.txtWishItemTitle)
         private val imgFavorite: ImageView = view.findViewById(R.id.imgWishFavorite)
 
-        fun bind(item: WishItem, clickListener: ((WishItem) -> Unit)?) {
+        fun bind(item: WishItem) {
             txtTitle.text = item.title
             Glide.with(itemView.context)
                 .load(item.imageUrl)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(imgThumbnail)
 
-            val itemKey = gson.toJson(item) // 🔥 WishItem 객체를 JSON 문자열로 변환
+            // ✅ 🔥 위시리스트에서는 항상 하트가 채워진 상태
+            if (isWishList) {
+                imgFavorite.setImageResource(R.drawable.ic_favorite_filled)
 
-            // 🔥 찜 상태에 따라 하트 아이콘 변경
-            imgFavorite.setImageResource(
-                if (favoriteItems.contains(itemKey)) R.drawable.ic_favorite_filled
-                else R.drawable.ic_favorite_border
-            )
-
-            // 🔥 찜 버튼 클릭 이벤트
-            imgFavorite.setOnClickListener {
-                if (favoriteItems.contains(itemKey)) {
-                    favoriteItems.remove(itemKey) // 찜 해제
-                    imgFavorite.setImageResource(R.drawable.ic_favorite_border)
-                } else {
-                    favoriteItems.add(itemKey) // 찜 추가
-                    imgFavorite.setImageResource(R.drawable.ic_favorite_filled)
+                // ✅ 🔥 위시리스트에서만 삭제 가능
+                imgFavorite.setOnClickListener {
+                    removeWishItem(item)
+                    onWishRemovedListener?.invoke(item) // 🔥 삭제 이벤트 전달
                 }
-                saveFavorites(favoriteItems) // 🔥 SharedPreferences 저장
-            }
+            } else {
+                // ✅ 🔥 위시탭에서는 SharedPreferences에서 상태를 불러와 설정
+                val isFavorite = isFavoriteItem(item)
+                imgFavorite.setImageResource(
+                    if (isFavorite) R.drawable.ic_favorite_filled
+                    else R.drawable.ic_favorite_border
+                )
 
-            // ✅ 클릭 시 이벤트 실행
-            itemView.setOnClickListener {
-                clickListener?.invoke(item)
+                imgFavorite.setOnClickListener {
+                    toggleFavorite(item, imgFavorite)
+                }
             }
         }
     }
@@ -79,18 +78,48 @@ class WishListAdapter(private val context: Context) : RecyclerView.Adapter<WishL
     }
 
     override fun onBindViewHolder(holder: WishViewHolder, position: Int) {
-        holder.bind(items[position], onItemClickListener)
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int = items.size
 
-    // 🔥 SharedPreferences에서 찜한 목록 불러오기 (JSON -> 객체 변환)
-    private fun loadFavorites(): MutableSet<String> {
-        return sharedPreferences.getStringSet("favorite_items", emptySet()) ?: mutableSetOf()
+    // ✅ 🔥 위시리스트에서만 삭제 (위시탭은 건드리지 않음)
+    private fun removeWishItem(item: WishItem) {
+        items.remove(item)
+        saveFavorites(items) // ✅ SharedPreferences에 반영
+        notifyDataSetChanged()
     }
 
-    // 🔥 SharedPreferences에 찜한 목록 저장
-    private fun saveFavorites(favorites: MutableSet<String>) {
-        sharedPreferences.edit().putStringSet("favorite_items", favorites).apply()
+    // ✅ 🔥 SharedPreferences에 저장된 찜 목록 불러오기
+    private fun loadFavorites(): MutableList<WishItem> {
+        val json = sharedPreferences.getString("favorite_items", null)
+        val type = object : TypeToken<MutableList<WishItem>>() {}.type
+        return gson.fromJson(json, type) ?: mutableListOf()
+    }
+
+    // ✅ 🔥 SharedPreferences에 찜 목록 저장
+    private fun saveFavorites(favorites: List<WishItem>) {
+        val editor = sharedPreferences.edit()
+        val json = gson.toJson(favorites)
+        editor.putString("favorite_items", json)
+        editor.apply()
+    }
+
+    // ✅ 🔥 특정 아이템이 찜 목록에 있는지 확인
+    private fun isFavoriteItem(item: WishItem): Boolean {
+        return loadFavorites().any { it.title == item.title }
+    }
+
+    // ✅ 🔥 찜 추가/해제 기능 (위시탭에서만 실행)
+    private fun toggleFavorite(item: WishItem, imgFavorite: ImageView) {
+        val favorites = loadFavorites()
+        if (favorites.any { it.title == item.title }) {
+            favorites.removeAll { it.title == item.title }
+            imgFavorite.setImageResource(R.drawable.ic_favorite_border)
+        } else {
+            favorites.add(item)
+            imgFavorite.setImageResource(R.drawable.ic_favorite_filled)
+        }
+        saveFavorites(favorites)
     }
 }
