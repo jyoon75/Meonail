@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ import retrofit2.Response
 class WishFragment : Fragment() {
 
     private lateinit var rvWishList: RecyclerView
+    private lateinit var txtLoading: TextView
     private lateinit var wishListAdapter: WishListAdapter
     private val serviceKey = "5f2a4f19-de50-4c12-963c-bbb1e93138c4"
 
@@ -31,9 +33,15 @@ class WishFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_wish, container, false)
         rvWishList = view.findViewById(R.id.rvWishList)
+        txtLoading = view.findViewById(R.id.txtLoading) // 🔥 로딩 메시지 추가
+
         wishListAdapter = WishListAdapter(requireContext(), isWishList = false)
         rvWishList.layoutManager = LinearLayoutManager(requireContext())
         rvWishList.adapter = wishListAdapter
+
+        // 로딩 시작
+        txtLoading.visibility = View.VISIBLE
+        rvWishList.visibility = View.GONE
 
         fetchWishListData()
 
@@ -49,6 +57,10 @@ class WishFragment : Fragment() {
 
     private fun fetchWishListData() {
         val apiService = RetrofitClient.instance
+
+        // 🔥 로딩 메시지 표시
+        txtLoading.visibility = View.VISIBLE
+        rvWishList.visibility = View.GONE
 
         lifecycleScope.launch {
             try {
@@ -72,6 +84,10 @@ class WishFragment : Fragment() {
                     Log.d("PARSED_DATA", "파싱된 데이터: ${wishItems.size} 개의 아이템")
 
                     wishListAdapter.updateData(wishItems)
+
+                    // 데이터 로딩 완료 -> RecyclerView 표시
+                    txtLoading.visibility = View.GONE
+                    rvWishList.visibility = View.VISIBLE
                 } else {
                     Log.e("API_ERROR", "응답 실패: ${response.code()}")
                 }

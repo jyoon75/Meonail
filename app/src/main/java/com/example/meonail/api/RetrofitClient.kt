@@ -9,9 +9,9 @@ object RetrofitClient {
     private const val BASE_URL = "http://api.kcisa.kr/openapi/"
 
     private val client = OkHttpClient.Builder()
-        .connectTimeout(60, TimeUnit.SECONDS) // 🔥 연결 타임아웃 60초로 증가
-        .readTimeout(60, TimeUnit.SECONDS)    // 🔥 읽기 타임아웃 60초로 증가
-        .writeTimeout(60, TimeUnit.SECONDS)   // 🔥 쓰기 타임아웃 60초로 증가
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)   // 🔥 쓰기 타임아웃 증가
         .retryOnConnectionFailure(true)       // 🔥 연결 실패 시 자동 재시도
         .build()
 
