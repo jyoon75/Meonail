@@ -3,6 +3,7 @@ package com.example.meonail
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,12 +28,23 @@ class WishListActivity : AppCompatActivity() {
         rvWishList = findViewById(R.id.rvWishList)
         emptyTextView = findViewById(R.id.txtEmptyWishList)
 
-        wishListAdapter = WishListAdapter(this, isWishList = true) // 🔥 리스너 제거
+        wishListAdapter = WishListAdapter(this, isWishList = true) { removedItem ->
+            Log.d("WishListActivity", "삭제된 아이템: ${removedItem.title}")
+
+            // 🔥 삭제된 아이템이 있을 경우, 결과값을 OK로 설정
+            setResult(RESULT_OK)
+        }
 
         rvWishList.layoutManager = LinearLayoutManager(this)
         rvWishList.adapter = wishListAdapter
 
         loadWishList()
+    }
+
+    // ✅ 🔥 뒤로 가기 버튼이 눌렸을 때 실행
+    override fun onSupportNavigateUp(): Boolean {
+        finish() // 현재 액티비티 종료
+        return true
     }
 
     private fun loadWishList() {
@@ -42,6 +54,14 @@ class WishListActivity : AppCompatActivity() {
         val type = object : TypeToken<List<WishItem>>() {}.type
 
         val wishList: List<WishItem> = gson.fromJson(json, type) ?: emptyList()
-        wishListAdapter.updateData(wishList)
+
+        if (wishList.isEmpty()) {
+            emptyTextView.visibility = View.VISIBLE // ✅ "아무것도 없습니다" 메시지 표시
+            rvWishList.visibility = View.GONE // ✅ RecyclerView 숨김
+        } else {
+            emptyTextView.visibility = View.GONE // ✅ 메시지 숨김
+            rvWishList.visibility = View.VISIBLE // ✅ RecyclerView 보이기
+            wishListAdapter.updateData(wishList)
+        }
     }
 }

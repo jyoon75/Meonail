@@ -22,6 +22,13 @@ class WishListAdapter(
 ) : RecyclerView.Adapter<WishListAdapter.WishViewHolder>() {
 
     private val items = mutableListOf<WishItem>()
+    private var onItemClickListener: ((WishItem) -> Unit)? = null // ✅ 클릭 리스너
+
+    fun setOnItemClickListener(listener: (WishItem) -> Unit) {
+        onItemClickListener = listener
+    }
+
+
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("WishPrefs", Context.MODE_PRIVATE)
     private val gson = Gson()
@@ -47,6 +54,10 @@ class WishListAdapter(
                 .load(item.imageUrl)
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(imgThumbnail)
+
+            itemView.setOnClickListener {
+                onItemClickListener?.invoke(item) // ✅ 아이템 클릭 시 상세페이지로 이동하도록 호출
+            }
 
             // ✅ 🔥 위시리스트에서는 항상 하트가 채워진 상태
             if (isWishList) {
