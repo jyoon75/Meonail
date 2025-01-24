@@ -13,11 +13,11 @@ import android.os.Environment
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.meonail.model.WishItem
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import androidx.core.content.FileProvider
+import com.example.meonail.model.WishItem
 
 class ImageCreationActivity : AppCompatActivity() {
 
@@ -45,9 +45,10 @@ class ImageCreationActivity : AppCompatActivity() {
 
         wishItem?.let {
             Glide.with(this)
-                .load(it.imageUrl)
+                .load(it.imageObject) // 🔥 여기서 `imageUrl`이 아니라 `url` 사용
                 .into(imgPoster)
         }
+
 
         // 🎨 이미지 생성 버튼 클릭 시
         btnGenerateImage.setOnClickListener {

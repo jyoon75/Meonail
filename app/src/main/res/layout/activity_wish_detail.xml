@@ -3,45 +3,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="16dp">
 
+    <!-- 행사 이미지 -->
     <ImageView
         android:id="@+id/imgWishPoster"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
+        android:layout_height="200dp"
+        android:scaleType="fitCenter" />
 
-
+    <!-- 행사 제목 -->
     <TextView
         android:id="@+id/txtWishTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="공연 제목"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:text="행사 제목"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="8dp" />
 
+    <!-- 분류 (전시, 공연, 연극 등) -->
     <TextView
-        android:id="@+id/txtWishCategory"
+        android:id="@+id/txtWishType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="카테고리"/>
+        android:text="분류: "
+        android:textSize="16sp"
+        android:padding="4dp" />
 
+    <!-- 행사 기간 -->
     <TextView
-        android:id="@+id/txtWishDate"
+        android:id="@+id/txtWishPeriod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="일정"/>
+        android:text="기간: "
+        android:textSize="16sp"
+        android:padding="4dp" />
 
+    <!-- 행사 장소 -->
     <TextView
-        android:id="@+id/txtWishFee"
+        android:id="@+id/txtWishLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="가격"/>
+        android:text="장소: "
+        android:textSize="16sp"
+        android:padding="4dp" />
 
+    <!-- 문의 연락처 -->
+    <TextView
+        android:id="@+id/txtWishContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="문의: "
+        android:textSize="16sp"
+        android:padding="4dp" />
+
+    <!-- 이미지 생성 버튼 -->
     <Button
         android:id="@+id/btnCreateImage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="이미지 생성"/>
+        android:text="이미지 생성"
+        android:layout_marginTop="16dp" />
+
 </LinearLayout>

@@ -28,12 +28,7 @@ class WishListActivity : AppCompatActivity() {
         rvWishList = findViewById(R.id.rvWishList)
         emptyTextView = findViewById(R.id.txtEmptyWishList)
 
-        wishListAdapter = WishListAdapter(this, isWishList = true) { removedItem ->
-            Log.d("WishListActivity", "삭제된 아이템: ${removedItem.title}")
-
-            // 🔥 삭제된 아이템이 있을 경우, 결과값을 OK로 설정
-            setResult(RESULT_OK)
-        }
+        wishListAdapter = WishListAdapter(this, isWishList = true) // 🔥 콜백 함수 제거
 
         rvWishList.layoutManager = LinearLayoutManager(this)
         rvWishList.adapter = wishListAdapter

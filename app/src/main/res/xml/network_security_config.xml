@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">www.kopis.or.kr</domain>
+        <domain includeSubdomains="true">www.culture.go.kr</domain>
+        <domain includeSubdomains="true">api.kcisa.kr</domain>
     </domain-config>
 </network-security-config>
