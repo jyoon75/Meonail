@@ -6,22 +6,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.meonail.R
-import com.example.meonail.api.RetrofitClient
 import com.example.meonail.model.WishItem
-import com.example.meonail.model.WishListResponse
 import com.example.meonail.adapter.WishListAdapter
+import com.example.meonail.api.RetrofitClient
+import com.example.meonail.model.WishListResponse
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class WishFragment : Fragment() {
 
     private lateinit var rvWishList: RecyclerView
-    private val wishListAdapter by lazy { WishListAdapter(requireContext()) } // ✅ 바로 초기화
+    private lateinit var txtLoading: TextView
+    private lateinit var wishListAdapter: WishListAdapter
+    private val serviceKey = "5f2a4f19-de50-4c12-963c-bbb1e93138c4"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,17 +33,23 @@ class WishFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_wish, container, false)
         rvWishList = view.findViewById(R.id.rvWishList)
+        txtLoading = view.findViewById(R.id.txtLoading) // 🔥 로딩 메시지 추가
+
+        wishListAdapter = WishListAdapter(requireContext(), isWishList = false)
         rvWishList.layoutManager = LinearLayoutManager(requireContext())
         rvWishList.adapter = wishListAdapter
 
+        // 로딩 시작
+        txtLoading.visibility = View.VISIBLE
+        rvWishList.visibility = View.GONE
+
         fetchWishListData()
 
-        // ✅ 클릭 이벤트 추가
         wishListAdapter.setOnItemClickListener { wishItem ->
             val intent = Intent(requireContext(), WishDetailActivity::class.java).apply {
                 putExtra("wishItem", wishItem)
             }
-            startActivity(intent) // ✅ 새로운 화면(액티비티)으로 이동
+            startActivity(intent)
         }
 
         return view
@@ -48,33 +58,41 @@ class WishFragment : Fragment() {
     private fun fetchWishListData() {
         val apiService = RetrofitClient.instance
 
+        // 🔥 로딩 메시지 표시
+        txtLoading.visibility = View.VISIBLE
+        rvWishList.visibility = View.GONE
+
         lifecycleScope.launch {
             try {
                 val response: Response<WishListResponse> = apiService.getWishListData(
-                    "607f1cc83e054d7aadd6ad4af6d00e36",
-                    "json",
-                    1,
-                    10
+                    serviceKey,
+                    pageNo = 1,
+                    numOfRows = 10,
+                    dtype = "전시",
+                    title = "전시"
                 )
 
-                Log.d("API_CALL", "응답 코드: ${response.code()}")
-                Log.d("API_CALL", "응답 바디: ${response.body()}")
+                // ✅ API 요청 로그 추가 (API 주소 확인용)
+                Log.d("API_REQUEST", "요청 URL: http://api.kcisa.kr/openapi/CNV_060/request?serviceKey=5f2a4f19-de50-4c12-963c-bbb1e93138c4&pageNo=1&numOfRows=10&dtype=전시&title=전시")
 
+                // ✅ API 응답이 정상인지 확인
                 if (response.isSuccessful) {
-                    response.body()?.eventList?.flatMap { it.events ?: emptyList() }?.let { data ->
-                        Log.d("API_RESPONSE", "Parsed Data: $data")
+                    val responseBody = response.body()
+                    Log.d("API_RESPONSE", "Raw Response: $responseBody")
 
-                        Log.d("WishFragment", "RecyclerView 아이템 개수: ${wishListAdapter.itemCount}")
+                    val wishItems = responseBody?.body?.items?.itemList ?: emptyList()
+                    Log.d("PARSED_DATA", "파싱된 데이터: ${wishItems.size} 개의 아이템")
 
+                    wishListAdapter.updateData(wishItems)
 
-                        wishListAdapter.updateData(data)
-                        rvWishList.post { wishListAdapter.notifyDataSetChanged() } // 🔥 RecyclerView 갱신
-                    }
+                    // 데이터 로딩 완료 -> RecyclerView 표시
+                    txtLoading.visibility = View.GONE
+                    rvWishList.visibility = View.VISIBLE
                 } else {
-                    Log.e("API_ERROR", "오류 코드: ${response.code()}, 메시지: ${response.errorBody()?.string()}")
+                    Log.e("API_ERROR", "응답 실패: ${response.code()}")
                 }
             } catch (e: Exception) {
-                Log.e("WishFragment", "네트워크 오류 발생", e)
+                Log.e("API_ERROR", "네트워크 오류 발생", e)
             }
         }
     }

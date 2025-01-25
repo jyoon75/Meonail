@@ -6,11 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("GGCULTUREVENTSTUS") // API 엔드포인트
+    @GET("CNV_060/request") // ✅ XML API 요청
     suspend fun getWishListData(
-        @Query("KEY") apiKey: String,
-        @Query("Type") responseType: String = "json",
-        @Query("pIndex") pageIndex: Int = 1,
-        @Query("pSize") pageSize: Int = 10
+        @Query("serviceKey") serviceKey: String,
+        @Query("pageNo") pageNo: Int,
+        @Query("numOfRows") numOfRows: Int,
+        @Query("dtype") dtype: String = "전시",
+        @Query("title") title: String = ""
     ): Response<WishListResponse>
 }
