@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
     <!-- 행사 이미지 -->
     <ImageView
         android:id="@+id/imgWishPoster"
@@ -12,44 +13,55 @@
         android:layout_height="200dp"
         android:scaleType="fitCenter" />
 
-    <!-- 행사 제목 -->
-    <TextView
-        android:id="@+id/txtWishTitle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="행사 제목"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="8dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <!-- 행사 기간 -->
-    <TextView
-        android:id="@+id/txtWishPeriod"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="기간: "
-        android:textSize="16sp"
-        android:padding="4dp" />
+            <!-- 행사 제목 -->
+            <TextView
+                android:id="@+id/txtWishTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="행사 제목"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="8dp" />
 
-    <!-- 정보 -->
-    <TextView
-        android:id="@+id/txtDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="정보: "
-        android:textSize="16sp"
-        android:padding="4dp" />
+            <!-- 행사 기간 -->
+            <TextView
+                android:id="@+id/txtWishPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="기간: "
+                android:textSize="16sp"
+                android:padding="4dp" />
 
-    <!-- 문의 연락처 -->
-    <TextView
-        android:id="@+id/txtWishContact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="문의: "
-        android:textSize="16sp"
-        android:padding="4dp" />
+            <!-- 정보 -->
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="정보: "
+                android:textSize="16sp"
+                android:padding="4dp" />
+
+            <!-- 문의 연락처 -->
+            <TextView
+                android:id="@+id/txtWishContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="문의: "
+                android:textSize="16sp"
+                android:padding="4dp" />
+        </LinearLayout>
+    </ScrollView>
 
     <!-- 이미지 생성 버튼 -->
     <Button
