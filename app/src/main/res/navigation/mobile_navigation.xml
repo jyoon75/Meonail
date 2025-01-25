@@ -21,7 +21,23 @@
         android:id="@+id/navigation_home"
         android:name="com.example.meonail.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <!-- 홈에서 상세 페이지로 가는 액션 추가 -->
+        <action
+            android:id="@+id/action_home_to_recordInfo"
+            app:destination="@id/recordInfoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recordInfoFragment"
+        android:name="com.example.meonail.RecordInfoFragment"
+        android:label="Record Info"
+        tools:layout="@layout/fragment_record_info">
+        <argument
+            android:name="record_id"
+            app:argType="integer" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_wish"

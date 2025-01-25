@@ -51,7 +51,7 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
 
 
 
-    // 데이터 가져오기
+    // 데이터 가져오기 (홈에서 사용)
     fun getAllRecords(): List<ContentValues> {
         val records = mutableListOf<ContentValues>()
         val db = readableDatabase
@@ -76,5 +76,37 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         cursor.close()
         return records
     }
+
+
+
+
+    // 데이터 가져오기 (상세보기 페이지에서 사용)
+    fun getRecordById(recordId: Int): ContentValues? {
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_NAME,
+            null,
+            "$COLUMN_ID = ?",
+            arrayOf(recordId.toString()),
+            null,
+            null,
+            null
+        )
+        val record = if (cursor.moveToFirst()) {
+            ContentValues().apply {
+                put(COLUMN_ID, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
+                put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)))
+                put(COLUMN_RATING, cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_RATING)))
+                put(COLUMN_TAGS, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TAGS)))
+                put(COLUMN_NOTE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOTE)))
+                put(COLUMN_IMAGES, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGES)))
+            }
+        } else {
+            null
+        }
+        cursor.close()
+        return record
+    }
+
 
 }

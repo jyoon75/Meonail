@@ -3,18 +3,25 @@ package com.example.meonail.adapter
 import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.example.meonail.MainActivity
 import com.example.meonail.R
 import com.example.meonail.RecordInfoFragment
 
-class RecordAdapter(private val records: List<ContentValues>) :
-    RecyclerView.Adapter<RecordAdapter.RecordViewHolder>() {
+/*class RecordAdapter(private val records: List<ContentValues>) :
+    RecyclerView.Adapter<RecordAdapter.RecordViewHolder>() {*/
+class RecordAdapter(
+    private val records: List<ContentValues>,
+    private val onItemClick: (Int) -> Unit
+) : RecyclerView.Adapter<RecordAdapter.RecordViewHolder>() {
 
     class RecordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageViewThumbnail: ImageView = itemView.findViewById(R.id.imageViewThumbnail)
@@ -55,13 +62,43 @@ class RecordAdapter(private val records: List<ContentValues>) :
         }
 
         // 아이템 클릭 시 상세 보기로 이동
-        holder.itemView.setOnClickListener {
+        /*holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, RecordInfoFragment::class.java).apply {
                 putExtra("record_id", record.getAsInteger(RecordDatabaseHelper.COLUMN_ID))
             }
             context.startActivity(intent)
-        }
+        }*/
+
+        /*holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            if (context is MainActivity) { // MainActivity를 FragmentManager 소유자로 가정
+                val fragment = RecordInfoFragment().apply {
+                    arguments = Bundle().apply {
+                        putInt("record_id", record.getAsInteger(RecordDatabaseHelper.COLUMN_ID))
+                    }
+                }
+                context.supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment_activity_main, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }*/
+
+        /*holder.itemView.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("record_id", record.getAsInteger(RecordDatabaseHelper.COLUMN_ID))
+            }
+            Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_recordInfoFragment, bundle)
+        }*/
+
+        /*// 클릭 이벤트 처리
+        holder.itemView.setOnClickListener {
+            val recordId = record.getAsInteger(RecordDatabaseHelper.COLUMN_ID)
+            onItemClick(recordId)
+        }*/
+
+
     }
 
     override fun getItemCount(): Int = records.size

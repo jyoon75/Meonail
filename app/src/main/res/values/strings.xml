@@ -13,7 +13,7 @@
     <string name="calrender_day">요일</string>
     <string name="_0">날짜</string>
 
-    <!-- 드롭다운 메뉴 항목 -->
+    <!-- 기록화면 카테고리 드롭다운 메뉴 항목 -->
     <string-array name="category_array">
         <item>영화</item>
         <item>드라마</item>
@@ -32,5 +32,13 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+
+    <!-- 홈 화면 정렬 드롭다운 메뉴 항목 -->
+    <string-array name="sort_options">
+        <item>최신순</item>
+        <item>오래된순</item>
+    </string-array>
+
 </resources>
 
