@@ -14,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 
 class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
-    private val args: RecordInfoFragmentArgs by navArgs() // Safe Args를 통해 인자 받기
+    //private val args: RecordInfoFragmentArgs by navArgs() // Safe Args를 통해 인자 받기
 
 
     private var recordId: Int? = null

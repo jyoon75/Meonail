@@ -1,6 +1,7 @@
 package com.example.meonail
 
 import RecordDatabaseHelper
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ContentValues
@@ -241,7 +242,14 @@ class RecordRegistActivity : AppCompatActivity() {
         val id = dbHelper.insertRecord(values)
         if (id > 0) {
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
-            clearInputs()
+
+            // 저장 성공 시 결과 전달
+            val intent = Intent()
+            setResult(Activity.RESULT_OK, intent)
+
+            clearInputs() // 입력 칸 초기화
+
+            finish() // 액티비티 종료
         } else {
             Toast.makeText(this, "저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }

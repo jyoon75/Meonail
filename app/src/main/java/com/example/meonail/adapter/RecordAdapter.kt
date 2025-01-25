@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.meonail.MainActivity
 import com.example.meonail.R
 import com.example.meonail.RecordInfoFragment
@@ -52,51 +54,26 @@ class RecordAdapter(
         // 내용 설정
         holder.textViewNote.text = record.getAsString(RecordDatabaseHelper.COLUMN_NOTE)
 
-        // 이미지 썸네일 설정 (첫 번째 이미지 사용)
-        val imageUris =
-            record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()
+        // 이미지 썸네일 설정 (Glide 사용)
+        val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()
+        Log.d("RecordAdapter", "Loaded Image URIs: $imageUris")
         if (imageUris.isNotEmpty()) {
-            holder.imageViewThumbnail.setImageURI(Uri.parse(imageUris[0]))
+            Glide.with(holder.imageViewThumbnail.context)
+                .load(imageUris[0]) // 첫 번째 이미지 로드
+                .placeholder(R.mipmap.ic_launcher) // 로드 중 기본 이미지
+                .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
+                .into(holder.imageViewThumbnail)
         } else {
-            holder.imageViewThumbnail.setImageResource(R.mipmap.ic_launcher) // 기본 이미지
+            holder.imageViewThumbnail.setImageResource(R.drawable.ic_favorite_filled) // 기본 이미지
         }
 
-        // 아이템 클릭 시 상세 보기로 이동
-        /*holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, RecordInfoFragment::class.java).apply {
-                putExtra("record_id", record.getAsInteger(RecordDatabaseHelper.COLUMN_ID))
-            }
-            context.startActivity(intent)
-        }*/
 
-        /*holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            if (context is MainActivity) { // MainActivity를 FragmentManager 소유자로 가정
-                val fragment = RecordInfoFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt("record_id", record.getAsInteger(RecordDatabaseHelper.COLUMN_ID))
-                    }
-                }
-                context.supportFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment_activity_main, fragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
-        }*/
 
-        /*holder.itemView.setOnClickListener {
-            val bundle = Bundle().apply {
-                putInt("record_id", record.getAsInteger(RecordDatabaseHelper.COLUMN_ID))
-            }
-            Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_recordInfoFragment, bundle)
-        }*/
-
-        /*// 클릭 이벤트 처리
+        // 클릭 이벤트 처리
         holder.itemView.setOnClickListener {
             val recordId = record.getAsInteger(RecordDatabaseHelper.COLUMN_ID)
             onItemClick(recordId)
-        }*/
+        }
 
 
     }

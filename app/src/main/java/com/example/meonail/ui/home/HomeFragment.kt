@@ -2,18 +2,22 @@ package com.example.meonail.ui.home
 
 import HomeViewModel
 import RecordDatabaseHelper
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meonail.RecordInfoFragment
+import com.example.meonail.RecordRegistActivity
 import com.example.meonail.adapter.RecordAdapter
 import com.example.meonail.databinding.FragmentHomeBinding
+import java.security.AccessController.checkPermission
 
 class HomeFragment : Fragment() {
 
@@ -23,6 +27,16 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
 
     private lateinit var dbHelper: RecordDatabaseHelper
+
+    // 저장 액티비티 실행 후 결과 처리
+    private val recordRegistLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // 데이터 갱신 로직 호출
+            homeViewModel.loadRecords(dbHelper) // DB에서 다시 데이터를 가져옴
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,30 +54,9 @@ class HomeFragment : Fragment() {
         val recyclerView = binding.recyclerViewRecords
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        /*homeViewModel.records.observe(viewLifecycleOwner) { records ->
-            val adapter = RecordAdapter(records)
-            recyclerView.adapter = adapter
-        }*/
-        /*homeViewModel.records.observe(viewLifecycleOwner) { records ->
-            val adapter = RecordAdapter(records) { recordId ->
-                // 클릭된 아이템의 ID로 상세 화면으로 이동
-                val action = HomeFragmentDirections.actionHomeToRecordInfo(recordId)
-                findNavController().navigate(action)
-            }
-            recyclerView.adapter = adapter
-        }*/
-
-        /*// RecyclerView 어댑터 설정
-        homeViewModel.records.observe(viewLifecycleOwner) { records ->
-            val adapter = RecordAdapter(records) { recordId ->
-                // 클릭한 항목의 ID를 사용해 상세 페이지로 이동
-                val action = HomeFragmentDirections.actionHomeToRecordInfo(recordId)
-                findNavController().navigate(action)
-            }
-            recyclerView.adapter = adapter
-        }*/
 
 
+        // recycle 어댑터 설정
         homeViewModel.records.observe(viewLifecycleOwner) { records ->
             val adapter = RecordAdapter(records) { record_id ->
                 // 클릭된 아이템의 ID로 상세 화면 실행
@@ -75,33 +68,30 @@ class HomeFragment : Fragment() {
             recyclerView.adapter = adapter
         }
 
-        /*// RecyclerView 어댑터 설정
-        homeViewModel.records.observe(viewLifecycleOwner) { records ->
-            val adapter = RecordAdapter(records) { recordId ->
-                // NavController를 사용하여 Fragment 전환
-                val action = HomeFragmentDirections.actionHomeToRecordInfo(recordId)
-                findNavController().navigate(action)
+
+        /*// 저장 액티비티 실행 버튼
+        binding.btnRecordRegist.setOnClickListener {
+            if (!checkPermission()) {
+                val intent = Intent(requireContext(), RecordRegistActivity::class.java)
+                recordRegistLauncher.launch(intent) // 결과를 받을 수 있도록 실행
             }
-            recyclerView.adapter = adapter
         }*/
-
-        /*homeViewModel.records.observe(viewLifecycleOwner) { records ->
-            val adapter = RecordAdapter(records) { record_id ->
-                // Safe Args를 통해 액션 호출
-                val action = HomeFragmentDirections.actionHomeToRecordInfo(record_id)
-                findNavController().navigate(action)  // 액션 실행
-            }
-            recyclerView.adapter = adapter
+        /*// 버튼 클릭 시 Activity 실행
+        binding.btnRecordSave.setOnClickListener {
+            val intent = Intent(requireContext(), RecordRegistActivity::class.java)
+            recordRegistLauncher.launch(intent) // 결과를 받을 수 있도록 실행
         }*/
-
-
 
 
         // 데이터 로드
         homeViewModel.loadRecords(dbHelper)
 
-
     }
+
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
