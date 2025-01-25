@@ -49,7 +49,6 @@ class ImageCreationActivity : AppCompatActivity() {
                 .into(imgPoster)
         }
 
-
         // 🎨 이미지 생성 버튼 클릭 시
         btnGenerateImage.setOnClickListener {
             val textOverlay = editText.text.toString() // 🔥 사용자가 입력한 텍스트 가져오기
@@ -67,7 +66,6 @@ class ImageCreationActivity : AppCompatActivity() {
             }
         }
 
-        // 🔄 공유 버튼 클릭 시
         // 🔄 공유 버튼 클릭 시
         btnShare.setOnClickListener {
             generatedBitmap?.let {

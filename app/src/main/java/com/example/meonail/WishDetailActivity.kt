@@ -49,7 +49,7 @@ class WishDetailActivity : AppCompatActivity() {
                 .load(item.imageObject)
                 .into(imgPoster)
 
-            // ✅ 🔥 버튼 클릭 시 이미지 생성 화면으로 이동
+            // ✅ 버튼 클릭 시 이미지 생성 화면으로 이동
             btnCreateImage.setOnClickListener {
                 val intent = Intent(this, ImageCreationActivity::class.java).apply {
                     putExtra("wishItem", item)
