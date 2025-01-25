@@ -54,6 +54,7 @@ dependencies {
     implementation ("org.simpleframework:simple-xml:2.7.1")  // ✅ SimpleXML 추가
     implementation ("com.squareup.retrofit2:converter-simplexml:2.9.0") // ✅ Retrofit XML 컨버터 추가
     implementation ("com.squareup.retrofit2:converter-scalars:2.9.0") // 🔥 Scalars Converter 추가
+    implementation ("org.jsoup:jsoup:1.15.4")
 
 
     //캘린더

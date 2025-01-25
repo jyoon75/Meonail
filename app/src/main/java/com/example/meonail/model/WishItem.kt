@@ -18,8 +18,8 @@ data class WishItem(
     @field:Element(name = "eventPeriod", required = false)
     var eventPeriod: String = "",
 
-    @field:Element(name = "eventSite", required = false)
-    var eventSite: String = "",
+    @field:Element(name = "description", required = false)
+    var description: String = "",
 
     @field:Element(name = "charge", required = false)
     var charge: String = "",
