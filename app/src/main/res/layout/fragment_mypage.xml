@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".MypageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- 상단: 프로필 섹션 -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-</FrameLayout>
+        <!-- 프로필 사진 -->
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/profile_img"
+            android:contentDescription="@string/profile_image_desc" />
+
+        <!-- 닉네임 -->
+        <TextView
+            android:id="@+id/nicknameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/nickname_default"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="start" />
+
+        <!-- 로그아웃 버튼 -->
+        <Button
+            android:id="@+id/logoutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout_button_text" />
+    </LinearLayout>
+
+    <!-- 중간 공백 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="24dp" />
+
+    <!-- 위시리스트 확인하기 버튼 -->
+    <Button
+        android:id="@+id/wishlistButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wishlist_button_text"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

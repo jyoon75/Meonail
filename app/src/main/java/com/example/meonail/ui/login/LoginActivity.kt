@@ -1,6 +1,7 @@
 package com.example.meonail.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -12,9 +13,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import com.example.meonail.MainActivity
 import com.example.meonail.databinding.ActivityLoginBinding
 
 import com.example.meonail.R
+import com.example.meonail.util.SessionManager
 
 class LoginActivity : AppCompatActivity() {
 
@@ -107,6 +110,15 @@ class LoginActivity : AppCompatActivity() {
             "$welcome $displayName",
             Toast.LENGTH_LONG
         ).show()
+
+        // 로그인 상태 저장
+        val sessionManager = SessionManager(this)
+        sessionManager.saveLoginState(true) // 로그인 상태 저장
+
+        // 메인 화면으로 이동
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish() // 로그인 화면 종료
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

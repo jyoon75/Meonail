@@ -1,59 +1,47 @@
 package com.example.meonail
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MypageFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MypageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    // 프래그먼트가 화면에 표시될 때 호출되는 메서드
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mypage, container, false)
-    }
+        // fragment_mypage 레이아웃 파일을 화면에 표시
+        val view = inflater.inflate(R.layout.fragment_mypage, container, false)
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MypageFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MypageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        // 뷰 초기화
+        val profileImage: ImageView = view.findViewById(R.id.profileImage) // 프로필 사진 뷰
+        val nicknameText: TextView = view.findViewById(R.id.nicknameText) // 닉네임 텍스트 뷰
+        val logoutButton: Button = view.findViewById(R.id.logoutButton)   // 로그아웃 버튼
+        val wishlistButton: Button = view.findViewById(R.id.wishlistButton) // 위시리스트 버튼
+
+        // 임시 데이터 설정 (실제 앱에서는 실제 데이터를 설정해야 함)
+        profileImage.setImageResource(R.drawable.profile_img) // 프로필 사진을 설정
+        nicknameText.text = "User"
+
+        // 로그아웃 버튼 클릭 시 동작 설정
+        logoutButton.setOnClickListener {
+            // 로그아웃 로직 추가 (예: 사용자 세션 삭제 및 로그인 화면으로 이동)
+        }
+
+        // 위시리스트 버튼 클릭 시 동작 설정
+        wishlistButton.setOnClickListener {
+            // WishListActivity로 이동
+            val intent = Intent(requireContext(), WishListActivity::class.java)
+            startActivity(intent)
+        }
+
+        return view // 초기화된 뷰를 반환
     }
 }
