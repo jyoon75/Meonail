@@ -7,9 +7,9 @@
         android:title="@string/title_calendar" />
 
     <item
-        android:id="@+id/navigation_memory"
+        android:id="@+id/navigation_wish"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_memory" />
+        android:title="@string/title_wish" />
 
     <item
         android:id="@+id/navigation_home"
@@ -17,9 +17,9 @@
         android:title="@string/title_home" />
 
     <item
-        android:id="@+id/navigation_wish"
+        android:id="@+id/navigation_memory"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_wish" />
+        android:title="@string/title_memory" />
 
     <item
         android:id="@+id/navigation_mypage"
