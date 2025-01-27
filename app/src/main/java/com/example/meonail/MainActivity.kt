@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupListeners() {
         // 버튼 클릭 시 액션 설정
         binding.btnRecordRegist.setOnClickListener {
-            if (checkPermission()) { // 권한 체크
+            if (!checkPermission()) { // 권한 체크
                 // 권한이 있을 경우 RecordRegistActivity로 이동
                 val intent = Intent(this, RecordRegistActivity::class.java)
                 startActivity(intent)

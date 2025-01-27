@@ -1,5 +1,6 @@
 package com.example.meonail
 
+import HomeViewModel
 import RecordDatabaseHelper
 import android.app.Activity
 import android.app.AlertDialog
@@ -20,11 +21,15 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import java.util.*
 
 class RecordRegistActivity : AppCompatActivity() {
+
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private lateinit var dbHelper: RecordDatabaseHelper
 
@@ -243,9 +248,17 @@ class RecordRegistActivity : AppCompatActivity() {
         if (id > 0) {
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
 
-            // 저장 성공 시 결과 전달
-            val intent = Intent()
+            /*homeViewModel.loadRecords(dbHelper) // 데이터 갱신 로직 호출*/
+
+            // 저장된 데이터를 Intent에 담아서 전달
+            val intent = Intent().apply {
+                putExtra("new_record_id", id) // 저장된 레코드의 ID 전달
+            }
             setResult(Activity.RESULT_OK, intent)
+
+            /*// 저장 성공 시 결과 전달
+            val intent = Intent()
+            setResult(Activity.RESULT_OK, intent)*/
 
             clearInputs() // 입력 칸 초기화
 

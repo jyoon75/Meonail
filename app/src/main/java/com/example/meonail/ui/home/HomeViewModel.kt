@@ -10,4 +10,9 @@ class HomeViewModel : ViewModel() {
     fun loadRecords(dbHelper: RecordDatabaseHelper) {
         _records.value = dbHelper.getAllRecords()
     }
+
+    fun updateRecords(newRecords: List<ContentValues>) {
+        _records.value = newRecords
+    }
+
 }

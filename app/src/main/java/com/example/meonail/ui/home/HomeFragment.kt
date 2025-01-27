@@ -34,7 +34,16 @@ class HomeFragment : Fragment() {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             // 데이터 갱신 로직 호출
-            homeViewModel.loadRecords(dbHelper) // DB에서 다시 데이터를 가져옴
+            /*homeViewModel.loadRecords(dbHelper) // DB에서 다시 데이터를 가져옴*/
+            val newRecordId = result.data?.getLongExtra("new_record_id", -1L)?.toInt()
+            if (newRecordId != null && newRecordId > 0) {
+                // 새로 추가된 레코드만 가져와서 갱신
+                val newRecord = dbHelper.getRecordById(newRecordId)
+                val updatedRecords = homeViewModel.records.value?.toMutableList() ?: mutableListOf()
+                newRecord?.let { updatedRecords.add(0, it) } // 새 레코드를 맨 앞에 추가
+                homeViewModel.updateRecords(updatedRecords) // 데이터 갱신
+            }
+
         }
     }
 
@@ -56,7 +65,8 @@ class HomeFragment : Fragment() {
 
 
 
-        // recycle 어댑터 설정
+        // 기록 상세보기
+        // RecyclerView 어댑터 설정
         homeViewModel.records.observe(viewLifecycleOwner) { records ->
             val adapter = RecordAdapter(records) { record_id ->
                 // 클릭된 아이템의 ID로 상세 화면 실행
@@ -68,19 +78,9 @@ class HomeFragment : Fragment() {
             recyclerView.adapter = adapter
         }
 
+        /*val intent = Intent(requireContext(), RecordRegistActivity::class.java)
+        recordRegistLauncher.launch(intent)*/
 
-        /*// 저장 액티비티 실행 버튼
-        binding.btnRecordRegist.setOnClickListener {
-            if (!checkPermission()) {
-                val intent = Intent(requireContext(), RecordRegistActivity::class.java)
-                recordRegistLauncher.launch(intent) // 결과를 받을 수 있도록 실행
-            }
-        }*/
-        /*// 버튼 클릭 시 Activity 실행
-        binding.btnRecordSave.setOnClickListener {
-            val intent = Intent(requireContext(), RecordRegistActivity::class.java)
-            recordRegistLauncher.launch(intent) // 결과를 받을 수 있도록 실행
-        }*/
 
 
         // 데이터 로드
