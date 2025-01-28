@@ -52,10 +52,19 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
 
 
     // 데이터 가져오기 (홈에서 사용)
-    fun getAllRecords(): List<ContentValues> {
+    fun getAllRecords(sortOrder: String): List<ContentValues> {
         val records = mutableListOf<ContentValues>()
         val db = readableDatabase
-        val cursor = db.query(TABLE_NAME, null, null, null, null, null, "$COLUMN_DATE DESC") // 날짜 내림차순
+        /*val cursor = db.query(TABLE_NAME, null, null, null, null, null, "$COLUMN_DATE DESC") // 날짜 내림차순*/
+        val cursor = db.query(
+            TABLE_NAME,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "$COLUMN_DATE $sortOrder" // 정렬 순서에 맞춰서 가져오기
+        )
 
         if (cursor.moveToFirst()) {
             do {

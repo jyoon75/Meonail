@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -81,10 +82,28 @@ class HomeFragment : Fragment() {
         /*val intent = Intent(requireContext(), RecordRegistActivity::class.java)
         recordRegistLauncher.launch(intent)*/
 
+        // Spinner의 아이템 선택에 따라 정렬 방식 처리
+        val spinnerSort = binding.spinnerSort
+        spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val sortOrder = when (position) {
+                    0 -> "DESC"  // 최신순 (내림차순)
+                    1 -> "ASC"   // 오래된순 (오름차순)
+                    else -> "DESC"
+                }
+                // 데이터 로드
+                homeViewModel.loadRecords(dbHelper, sortOrder)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // 아무 것도 선택되지 않았을 때의 처리 (필요하면 구현)
+            }
+        }
 
 
-        // 데이터 로드
-        homeViewModel.loadRecords(dbHelper)
+
+        // 데이터 로드 (기본적으로 최신순으로 로드)
+        homeViewModel.loadRecords(dbHelper, "DESC")
 
     }
 

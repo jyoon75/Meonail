@@ -47,6 +47,17 @@
             android:isIndicator="true"
             android:layout_marginBottom="4dp" />
 
+        <!-- 내용 -->
+        <TextView
+            android:id="@+id/textViewNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="노트 내용 예시입니다.노트 내용 예시입니다."
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
         <!-- 태그 -->
         <TextView
             android:id="@+id/textViewTags"
@@ -59,15 +70,5 @@
             android:textColor="@color/primary_ver2"
             android:layout_marginBottom="4dp" />
 
-        <!-- 내용 -->
-        <TextView
-            android:id="@+id/textViewNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="노트 내용 예시입니다.노트 내용 예시입니다."
-            android:textColor="@color/black"
-            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

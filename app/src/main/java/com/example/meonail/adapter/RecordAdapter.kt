@@ -49,7 +49,14 @@ class RecordAdapter(
 
         // 태그 설정
         val tags = record.getAsString(RecordDatabaseHelper.COLUMN_TAGS)
-        holder.textViewTags.text = tags.split(",").joinToString(" ") { "#$it" }
+        // 태그가 비어 있으면 #을 표시하지 않도록
+        if (tags.isNotEmpty()) {
+            holder.textViewTags.text = tags.split(",")
+                .filter { it.isNotBlank() }  // 공백 태그 제거
+                .joinToString(" ") { "#$it" }
+        } else {
+            holder.textViewTags.text = "" // 태그가 없으면 공백 처리
+        }
 
         // 내용 설정
         holder.textViewNote.text = record.getAsString(RecordDatabaseHelper.COLUMN_NOTE)

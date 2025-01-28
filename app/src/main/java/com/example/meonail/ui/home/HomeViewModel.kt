@@ -7,8 +7,10 @@ class HomeViewModel : ViewModel() {
     private val _records = MutableLiveData<List<ContentValues>>()
     val records: LiveData<List<ContentValues>> get() = _records
 
-    fun loadRecords(dbHelper: RecordDatabaseHelper) {
-        _records.value = dbHelper.getAllRecords()
+    // sortOrder를 추가하여 정렬된 데이터를 가져오도록 수정
+    fun loadRecords(dbHelper: RecordDatabaseHelper, sortOrder: String) {
+        val sortedRecords = dbHelper.getAllRecords(sortOrder) // sortOrder를 전달
+        _records.value = sortedRecords
     }
 
     fun updateRecords(newRecords: List<ContentValues>) {
