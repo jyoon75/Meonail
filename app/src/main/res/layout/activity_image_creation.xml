@@ -39,20 +39,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="이미지 생성"
-            android:layout_margin="8dp"/>
+            android:layout_margin="15dp"/>
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="저장"
-            android:layout_margin="8dp"/>
+            android:layout_margin="15dp"/>
 
-        <Button
-            android:id="@+id/btnShare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="공유"
-            android:layout_margin="8dp"/>
     </LinearLayout>
 </LinearLayout>

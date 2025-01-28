@@ -25,7 +25,6 @@ class ImageCreationActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var btnGenerateImage: Button
     private lateinit var btnSave: Button
-    private lateinit var btnShare: Button
     private var generatedBitmap: Bitmap? = null // 생성된 이미지를 저장할 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +38,6 @@ class ImageCreationActivity : AppCompatActivity() {
         editText = findViewById(R.id.editTextOverlay)
         btnGenerateImage = findViewById(R.id.btnGenerateImage)
         btnSave = findViewById(R.id.btnSave)
-        btnShare = findViewById(R.id.btnShare)
 
         val wishItem = intent.getParcelableExtra<WishItem>("wishItem")
 
@@ -63,14 +61,6 @@ class ImageCreationActivity : AppCompatActivity() {
                 uri?.let {
                     Toast.makeText(this, "이미지 저장 완료!", Toast.LENGTH_SHORT).show()
                 }
-            }
-        }
-
-        // 🔄 공유 버튼 클릭 시
-        btnShare.setOnClickListener {
-            generatedBitmap?.let {
-                val uri = saveImageToGallery(it)
-                uri?.let { shareImage(it) }
             }
         }
     }
@@ -152,21 +142,5 @@ class ImageCreationActivity : AppCompatActivity() {
             Toast.makeText(this, "이미지 저장 실패", Toast.LENGTH_SHORT).show()
             null
         }
-    }
-
-    // 🔄 이미지 공유 함수
-    private fun shareImage(uri: Uri) {
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/png"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) // ✅ 파일 접근 권한 부여
-        }
-        startActivity(Intent.createChooser(shareIntent, "이미지 공유하기"))
-    }
-
-    // ✅ 뒤로 가기 버튼 클릭 시 실행
-    override fun onSupportNavigateUp(): Boolean {
-        finish() // 현재 액티비티 종료
-        return true
     }
 }
