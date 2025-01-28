@@ -1,5 +1,6 @@
 package com.example.meonail
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -57,6 +58,14 @@ class WishListActivity : AppCompatActivity() {
             emptyTextView.visibility = View.GONE // ✅ 메시지 숨김
             rvWishList.visibility = View.VISIBLE // ✅ RecyclerView 보이기
             wishListAdapter.updateData(wishList)
+        }
+
+        // ✅ 클릭 시 상세페이지 이동 설정
+        wishListAdapter.setOnItemClickListener { wishItem ->
+            val intent = Intent(this, WishDetailActivity::class.java).apply {
+                putExtra("wishItem", wishItem) // 🔥 선택한 아이템 전달
+            }
+            startActivity(intent) // 🔥 상세 페이지로 이동
         }
     }
 }
