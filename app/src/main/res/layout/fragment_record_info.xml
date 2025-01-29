@@ -10,19 +10,46 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/imageViewThumbnailInfo"
             android:layout_width="150dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher" />-->
+        <!--<HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/imageScrollView"
+            android:scrollbars="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/imageViewInfo" />
+        </HorizontalScrollView>-->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/imageScrollView"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:id="@+id/imageContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
         <TextView
             android:id="@+id/textViewTitleInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="20sp"
+            android:textColor="@color/text"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <RatingBar
@@ -31,20 +58,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:numStars="5"
-            android:stepSize="0.5" />
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            android:progressTint="@color/primary_ver2"/>
 
         <TextView
             android:id="@+id/textViewTagsInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@color/primary_ver2" />
 
         <TextView
             android:id="@+id/textViewNoteInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:textColor="@color/text"
+            android:textSize="16sp" />
 
     </LinearLayout>
 </ScrollView>

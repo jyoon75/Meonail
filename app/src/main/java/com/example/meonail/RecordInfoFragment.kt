@@ -4,18 +4,17 @@ import RecordDatabaseHelper
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 
 class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
-
-    //private val args: RecordInfoFragmentArgs by navArgs() // Safe Args를 통해 인자 받기
-
 
     private var recordId: Int? = null
     private lateinit var databaseHelper: RecordDatabaseHelper
@@ -24,6 +23,19 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         super.onCreate(savedInstanceState)
         recordId = arguments?.getInt("record_id")
         databaseHelper = RecordDatabaseHelper(requireContext())
+
+        setHasOptionsMenu(true) // 뒤로가기 버튼을 활성화
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 상단 앱바에 뒤로가기 화살표 표시
+        val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true) // 뒤로가기 버튼 표시
+            title = "기록 상세보기" // 원하는 제목 설정
+        }
     }
 
     override fun onCreateView(
@@ -32,7 +44,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         val view = inflater.inflate(R.layout.fragment_record_info, container, false)
 
         // UI 요소 초기화
-        val imageViewThumbnailInfo = view.findViewById<ImageView>(R.id.imageViewThumbnailInfo)
+        val imageContainer = view.findViewById<LinearLayout>(R.id.imageContainer)
         val textViewTitleInfo = view.findViewById<TextView>(R.id.textViewTitleInfo)
         val ratingBarInfo = view.findViewById<RatingBar>(R.id.ratingBarInfo)
         val textViewTagsInfo = view.findViewById<TextView>(R.id.textViewTagsInfo)
@@ -42,17 +54,54 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         recordId?.let {
             val record = databaseHelper.getRecordById(it)
             record?.let { data ->
+                // 제목
                 textViewTitleInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_TITLE)
+
+                // 별점
                 ratingBarInfo.rating = data.getAsFloat(RecordDatabaseHelper.COLUMN_RATING)
+
+                // 태그
                 val tags = data.getAsString(RecordDatabaseHelper.COLUMN_TAGS)
-                textViewTagsInfo.text = tags.split(",").joinToString(" ") { "#$it" }
+                // 태그가 비어 있으면 #을 표시하지 않도록
+                if (tags.isNotEmpty()) {
+                    textViewTagsInfo.text = tags.split(",")
+                        .filter { it.isNotBlank() }  // 공백 태그 제거
+                        .joinToString(" ") { "#$it" }
+                } else {
+                    textViewTagsInfo.text = "" // 태그가 없으면 공백 처리
+                }
+
+                // 기록 내용
                 textViewNoteInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_NOTE)
 
-                // 이미지 설정
+                /*// 이미지 설정
                 val imageUris = data.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",")
                 if (!imageUris.isNullOrEmpty()) {
-                    imageViewThumbnailInfo.setImageURI(Uri.parse(imageUris[0]))
-                }
+                    imageContainer.setImageURI(Uri.parse(imageUris[0]))
+                }*/
+                /*// 이미지 설정
+                val imageUris = data.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",")
+                if (!imageUris.isNullOrEmpty()) {
+                    imageUris.forEach { uri ->
+                        val imageView = ImageView(requireContext()).apply {
+                            *//*layoutParams = LinearLayout.LayoutParams(200, 200).apply {
+                                setMargins(8, 0, 8, 0) // 이미지 간격
+                            }
+                            setImageURI(Uri.parse(uri))
+                            scaleType = ImageView.ScaleType.CENTER_CROP*//*
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,  // 가로 크기: 원래 이미지 크기
+                                LinearLayout.LayoutParams.WRAP_CONTENT   // 세로 크기: 원래 이미지 크기
+                            ).apply {
+                                setMargins(8, 0, 8, 0) // 이미지 간격
+                            }
+                            setImageURI(Uri.parse(uri)) // URI를 사용해 이미지 설정
+                            scaleType = ImageView.ScaleType.FIT_CENTER // 이미지를 중앙에 맞춤 (필요 시 제거 가능)
+                            adjustViewBounds = true // 이미지가 원래 비율로 유지되도록 설정
+                        }
+                        imageContainer.addView(imageView) // 이미지 추가
+                    }
+                }*/
             }
         }
 
@@ -60,13 +109,23 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // 뒤로가기 버튼 비활성화 (필요 시)
+        val activity = requireActivity() as AppCompatActivity
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val recordId = args.recordId // Safe Args를 통해 넘겨받은 값
-        // 이제 recordId를 사용하여 데이터를 로드하거나 표시
-    }*/
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // 뒤로가기 버튼 클릭 시
+                requireActivity().onBackPressed() // 이전 화면으로 이동
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
 
     override fun onDestroy() {

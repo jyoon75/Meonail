@@ -1,8 +1,6 @@
 package com.example.meonail.adapter
 
 import android.content.ContentValues
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +12,8 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.meonail.MainActivity
 import com.example.meonail.R
-import com.example.meonail.RecordInfoFragment
 
-/*class RecordAdapter(private val records: List<ContentValues>) :
-    RecyclerView.Adapter<RecordAdapter.RecordViewHolder>() {*/
 class RecordAdapter(
     private val records: List<ContentValues>,
     private val onItemClick: (Int) -> Unit
@@ -75,13 +69,14 @@ class RecordAdapter(
         }
 
 
-
         // 클릭 이벤트 처리
         holder.itemView.setOnClickListener {
             val recordId = record.getAsInteger(RecordDatabaseHelper.COLUMN_ID)
-            onItemClick(recordId)
+            val bundle = Bundle().apply {
+                putInt("record_id", recordId)
+            }
+            Navigation.findNavController(holder.itemView).navigate(R.id.action_home_to_recordInfo, bundle)
         }
-
 
     }
 
