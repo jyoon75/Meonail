@@ -71,7 +71,9 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
 
-        // 탭 설정
+
+
+        /*// 탭 설정
         // 초기 데이터 로드 (전체 기록)
         loadRecords("전체", "DESC")
 
@@ -98,7 +100,60 @@ class HomeFragment : Fragment() {
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })*/
+        // 탭 설정 및 데이터 로드
+        setupTabs()
+
+        /*binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val category = tab?.text.toString().substringBeforeLast(" (")
+                loadRecords(category, getSelectedSortOrder())
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })*/
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val category = getSelectedCategory()
+                val sortOrder = getSelectedSortOrder()
+                loadRecords(category, sortOrder)  // 현재 정렬 방식 유지
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+
+
+        /*binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                loadRecords(getSelectedCategory(), getSelectedSortOrder())
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }*/
+        binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val sortOrder = getSelectedSortOrder()
+                val selectedCategory = getSelectedCategory()
+
+                loadRecords(selectedCategory, sortOrder) // 현재 선택된 카테고리에 맞춰 정렬
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+
+        homeViewModel.records.observe(viewLifecycleOwner) { records ->
+            adapter = RecordAdapter(records) { recordId ->
+                val intent = Intent(requireContext(), RecordInfoFragment::class.java).apply {
+                    putExtra("record_id", recordId)
+                }
+                startActivity(intent)
+            }
+            binding.recyclerViewRecords.adapter = adapter
+        }
+
+        loadRecords("전체", "DESC")
 
 
 
@@ -129,7 +184,8 @@ class HomeFragment : Fragment() {
                     else -> "DESC"
                 }
                 // 데이터 로드
-                homeViewModel.loadRecords(dbHelper, sortOrder)
+                /*homeViewModel.loadRecords(dbHelper, sortOrder)*/
+                loadRecords(getSelectedCategory(), sortOrder)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -157,7 +213,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun loadRecords(category: String, sortOrder: String) {
+
+    /*private fun loadRecords(category: String, sortOrder: String) {
         val records = if (category == "전체") {
             dbHelper.getAllRecords(sortOrder)
         } else {
@@ -170,6 +227,23 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         binding.recyclerViewRecords.adapter = adapter
+    }*/
+    private fun loadRecords(category: String, sortOrder: String) {
+        val records = if (category == "전체") {
+            dbHelper.getAllRecords(sortOrder)
+        } else {
+            dbHelper.getRecordsByCategory(category, sortOrder)
+        }
+        homeViewModel.updateRecords(records)
+    }
+
+
+    private fun getSelectedCategory(): String {
+        return binding.tabLayout.getTabAt(binding.tabLayout.selectedTabPosition)?.text.toString().substringBeforeLast(" (")
+    }
+
+    private fun getSelectedSortOrder(): String {
+        return if (binding.spinnerSort.selectedItemPosition == 0) "DESC" else "ASC"
     }
 
 
