@@ -1,5 +1,6 @@
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -117,5 +118,18 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         return record
     }
 
+    // 날짜에 따라 이미지 내보내기
+    fun getImageUrisForDate(date: String): List<String> {
+        val uriList = mutableListOf<String>()
+        val db = readableDatabase
+        val cursor: Cursor = db.rawQuery("SELECT $COLUMN_IMAGES FROM $TABLE_NAME WHERE $COLUMN_DATE = ?", arrayOf(date))
+
+        if (cursor.moveToFirst()) {
+            val uris = cursor.getString(0)
+            uriList.addAll(uris.split(","))
+        }
+        cursor.close()
+        return uriList
+    }
 
 }
