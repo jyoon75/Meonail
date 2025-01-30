@@ -18,12 +18,16 @@ import com.example.meonail.RecordInfoFragment
 import com.example.meonail.RecordRegistActivity
 import com.example.meonail.adapter.RecordAdapter
 import com.example.meonail.databinding.FragmentHomeBinding
+import com.google.android.material.tabs.TabLayout
 import java.security.AccessController.checkPermission
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    // 어댑터를 클래스 레벨에서 선언
+    private lateinit var adapter: RecordAdapter
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -60,9 +64,41 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         dbHelper = RecordDatabaseHelper(requireContext())
+        binding.recyclerViewRecords.layoutManager = LinearLayoutManager(requireContext())
+
 
         val recyclerView = binding.recyclerViewRecords
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+
+        // 탭 설정
+        // 초기 데이터 로드 (전체 기록)
+        loadRecords("전체", "DESC")
+
+        // Spinner(정렬) 설정
+        binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val sortOrder = if (position == 0) "DESC" else "ASC"
+                val selectedCategory = binding.tabLayout.getTabAt(binding.tabLayout.selectedTabPosition)?.text.toString()
+                loadRecords(selectedCategory, sortOrder)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // TabLayout 설정
+        setupTabs()
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val category = tab?.text.toString()
+                val sortOrder = if (binding.spinnerSort.selectedItemPosition == 0) "DESC" else "ASC"
+                loadRecords(category, sortOrder)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
 
 
 
@@ -76,7 +112,8 @@ class HomeFragment : Fragment() {
                 }
                 startActivity(intent)
             }
-            recyclerView.adapter = adapter
+            /*recyclerView.adapter = adapter*/
+            binding.recyclerViewRecords.adapter = adapter
         }
 
         /*val intent = Intent(requireContext(), RecordRegistActivity::class.java)
@@ -107,9 +144,33 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun setupTabs() {
+        binding.tabLayout.removeAllTabs()
+        val categories = dbHelper.getCategoriesWithCount()
 
+        // "전체" 탭 추가
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("전체 (${categories.values.sum()})"))
 
+        // 카테고리별 탭 추가
+        categories.forEach { (category, count) ->
+            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("$category ($count)"))
+        }
+    }
 
+    private fun loadRecords(category: String, sortOrder: String) {
+        val records = if (category == "전체") {
+            dbHelper.getAllRecords(sortOrder)
+        } else {
+            dbHelper.getRecordsByCategory(category, sortOrder)
+        }
+        adapter = RecordAdapter(records) { recordId ->
+            val intent = Intent(requireContext(), RecordInfoFragment::class.java).apply {
+                putExtra("record_id", recordId)
+            }
+            startActivity(intent)
+        }
+        binding.recyclerViewRecords.adapter = adapter
+    }
 
 
     override fun onDestroyView() {

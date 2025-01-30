@@ -132,4 +132,57 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         return uriList
     }
 
+
+
+
+    // 카테고리 탭
+    fun getCategoriesWithCount(): Map<String, Int> {
+        val categoryCountMap = mutableMapOf<String, Int>()
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT $COLUMN_CATEGORY, COUNT(*) FROM $TABLE_NAME GROUP BY $COLUMN_CATEGORY", null)
+
+        if (cursor.moveToFirst()) {
+            do {
+                val category = cursor.getString(0) ?: "기타"
+                val count = cursor.getInt(1)
+                categoryCountMap[category] = count
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return categoryCountMap
+    }
+
+    fun getRecordsByCategory(category: String, sortOrder: String): List<ContentValues> {
+        val records = mutableListOf<ContentValues>()
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_NAME,
+            null,
+            "$COLUMN_CATEGORY = ?",
+            arrayOf(category),
+            null,
+            null,
+            "$COLUMN_DATE $sortOrder"
+        )
+
+        if (cursor.moveToFirst()) {
+            do {
+                val record = ContentValues().apply {
+                    put(COLUMN_ID, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
+                    put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)))
+                    put(COLUMN_DATE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)))
+                    put(COLUMN_RATING, cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_RATING)))
+                    put(COLUMN_TAGS, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TAGS)))
+                    put(COLUMN_IMAGES, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGES)))
+                    put(COLUMN_NOTE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOTE)))
+                    put(COLUMN_PRIVATE, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRIVATE)))
+                }
+                records.add(record)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return records
+    }
+
+
 }
