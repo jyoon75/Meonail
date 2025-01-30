@@ -17,7 +17,7 @@ import com.example.meonail.databinding.ActivityMainBinding
 import com.example.meonail.ui.login.LoginActivity
 import com.example.meonail.util.SessionManager
 
-class MainActivity : AppCompatActivity() {
+class  MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding // ViewBinding 사용
 

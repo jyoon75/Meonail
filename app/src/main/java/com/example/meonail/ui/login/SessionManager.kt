@@ -18,4 +18,15 @@ class SessionManager(context: Context) {
     fun clearSession() {
         sharedPreferences.edit().clear().apply()
     }
+
+    // 닉네임 저장
+    fun saveNickname(nickname: String) {
+        sharedPreferences.edit().putString("nickname", nickname).apply()
+    }
+
+    // 닉네임 가져오기
+    fun getNickname(): String? {
+        return sharedPreferences.getString("nickname", null)
+    }
 }
+

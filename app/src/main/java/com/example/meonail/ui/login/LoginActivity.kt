@@ -2,20 +2,18 @@ package com.example.meonail.ui.login
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.meonail.MainActivity
 import com.example.meonail.databinding.ActivityLoginBinding
-
 import com.example.meonail.R
 import com.example.meonail.util.SessionManager
 
@@ -41,7 +39,6 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
-            // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
@@ -63,8 +60,6 @@ class LoginActivity : AppCompatActivity() {
                 updateUiWithUser(loginResult.success)
             }
             setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
             finish()
         })
 
@@ -103,25 +98,29 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
+
+        // 사용자가 입력한 이메일 가져오기
+        val email = binding.username.text.toString()
+
+        // 이메일에서 "@" 앞부분만 추출 (예: "user@example.com" → "user")
+        val nickname = email.substringBefore("@")
+
         Toast.makeText(
             applicationContext,
-            "$welcome $displayName",
+            "$welcome $nickname",
             Toast.LENGTH_LONG
         ).show()
 
-        // 로그인 상태 저장
         val sessionManager = SessionManager(this)
-        sessionManager.saveLoginState(true) // 로그인 상태 저장
+        sessionManager.saveLoginState(true)
+        sessionManager.saveNickname(nickname) // 닉네임 저장
 
-        // 메인 화면으로 이동
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        finish() // 로그인 화면 종료
+        finish()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showLoginFailed(errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
     }
 }
@@ -140,3 +139,4 @@ fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
     })
 }
+
