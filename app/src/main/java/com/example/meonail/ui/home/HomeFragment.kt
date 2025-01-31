@@ -33,24 +33,13 @@ class HomeFragment : Fragment() {
 
     private lateinit var dbHelper: RecordDatabaseHelper
 
-    // 저장 액티비티 실행 후 결과 처리
-    private val recordRegistLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // 데이터 갱신 로직 호출
-            /*homeViewModel.loadRecords(dbHelper) // DB에서 다시 데이터를 가져옴*/
-            val newRecordId = result.data?.getLongExtra("new_record_id", -1L)?.toInt()
-            if (newRecordId != null && newRecordId > 0) {
-                // 새로 추가된 레코드만 가져와서 갱신
-                val newRecord = dbHelper.getRecordById(newRecordId)
-                val updatedRecords = homeViewModel.records.value?.toMutableList() ?: mutableListOf()
-                newRecord?.let { updatedRecords.add(0, it) } // 새 레코드를 맨 앞에 추가
-                homeViewModel.updateRecords(updatedRecords) // 데이터 갱신
-            }
 
-        }
+    // 데이터 로딩
+    override fun onResume() {
+        super.onResume()
+        loadRecords("전체", "DESC") // 홈 화면에서 데이터를 다시 불러오기
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

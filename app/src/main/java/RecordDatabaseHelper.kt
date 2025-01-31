@@ -195,5 +195,15 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
     }
 
 
+    // 기록 수정
+    fun updateRecord(values: ContentValues, recordId: Int): Int {
+        val db = writableDatabase
+        val selection = "${COLUMN_ID} = ?"
+        val selectionArgs = arrayOf(recordId.toString())
+        return db.update(TABLE_NAME, values, selection, selectionArgs)
+    }
+
+
+
 
 }

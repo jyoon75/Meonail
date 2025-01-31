@@ -259,30 +259,43 @@ class RecordRegistActivity : AppCompatActivity() {
             put(RecordDatabaseHelper.COLUMN_PRIVATE, if (isPrivate) 1 else 0)
         }
 
-        val id = dbHelper.insertRecord(values)
-        if (id > 0) {
-            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
 
-            /*homeViewModel.loadRecords(dbHelper) // 데이터 갱신 로직 호출*/
-            // HomeFragment의 ViewModel에 기록 목록 갱신을 요청
-            homeViewModel.loadRecords(dbHelper, "DESC") // 기록을 최신순으로 로드
+        // 기존 레코드 수정 모드일 때
+        val recordId = intent.getIntExtra("record_id", -1)
+        if (recordId != -1) {
+            // 기존 레코드를 업데이트
+            val rowsAffected = dbHelper.updateRecord(values, recordId)
+            if (rowsAffected > 0) {
+                Toast.makeText(this, "수정되었습니다.", Toast.LENGTH_SHORT).show()
 
+                // 기록을 최신순으로 로드
+                homeViewModel.loadRecords(dbHelper, "DESC")
 
-            // 저장된 데이터를 Intent에 담아서 전달
-            val intent = Intent().apply {
-                putExtra("new_record_id", id) // 저장된 레코드의 ID 전달
+                val intent = Intent().apply {
+                    putExtra("updated_record_id", recordId) // 수정된 레코드의 ID 전달
+                }
+                setResult(Activity.RESULT_OK, intent)
+                finish() // 액티비티 종료
+            } else {
+                Toast.makeText(this, "수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
-            setResult(Activity.RESULT_OK, intent)
-
-            /*// 저장 성공 시 결과 전달
-            val intent = Intent()
-            setResult(Activity.RESULT_OK, intent)*/
-
-            clearInputs() // 입력 칸 초기화
-
-            finish() // 액티비티 종료
         } else {
-            Toast.makeText(this, "저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            // 새로 추가하는 경우
+            val id = dbHelper.insertRecord(values)
+            if (id > 0) {
+                Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+
+                homeViewModel.loadRecords(dbHelper, "DESC")
+
+                val intent = Intent().apply {
+                    putExtra("new_record_id", id)
+                }
+                setResult(Activity.RESULT_OK, intent)
+                clearInputs() // 입력 칸 초기화
+                finish() // 액티비티 종료
+            } else {
+                Toast.makeText(this, "저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
