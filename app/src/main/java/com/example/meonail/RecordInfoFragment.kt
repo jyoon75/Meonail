@@ -1,9 +1,12 @@
 package com.example.meonail
 
 import RecordDatabaseHelper
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +14,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
@@ -49,6 +54,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         val ratingBarInfo = view.findViewById<RatingBar>(R.id.ratingBarInfo)
         val textViewTagsInfo = view.findViewById<TextView>(R.id.textViewTagsInfo)
         val textViewNoteInfo = view.findViewById<TextView>(R.id.textViewNoteInfo)
+        val textViewDateInfo = view.findViewById<TextView>(R.id.textViewDateInfo)
 
         // 데이터베이스에서 기록 정보 불러오기
         recordId?.let {
@@ -102,6 +108,10 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
                         imageContainer.addView(imageView) // 이미지 추가
                     }
                 }*/
+
+                // 기록 날짜
+                val recordDate = data.getAsString(RecordDatabaseHelper.COLUMN_DATE) // 날짜 가져오기
+                textViewDateInfo.text = "기록일: $recordDate"
             }
         }
 
@@ -123,9 +133,53 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
                 requireActivity().onBackPressed() // 이전 화면으로 이동
                 true
             }
+            R.id.menu_edit -> {
+                // 메뉴 기록 수정
+                editRecord()
+                true
+            }
+            R.id.menu_delete -> {
+                // 메뉴 기록 삭제
+                deleteRecord()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
+    // 수정, 삭제 메뉴
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_record_info, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    private fun editRecord() {
+        val intent = Intent(requireContext(), RecordRegistActivity::class.java).apply {
+            putExtra("record_id", recordId)
+        }
+        startActivity(intent)
+    }
+
+    private fun deleteRecord() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("삭제 확인")
+            .setMessage("정말 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ ->
+                recordId?.let {
+                    databaseHelper.deleteRecord(it)
+                    Toast.makeText(requireContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    requireActivity().onBackPressed()
+                }
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+
+
+
 
 
     override fun onDestroy() {

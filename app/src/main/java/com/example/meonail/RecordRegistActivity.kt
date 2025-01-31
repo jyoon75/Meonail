@@ -93,6 +93,22 @@ class RecordRegistActivity : AppCompatActivity() {
         val checkBoxPrivate = findViewById<CheckBox>(R.id.checkBoxPrivate)
         val saveButton = findViewById<Button>(R.id.btnRecordSave)
 
+
+
+        // ✅ 기존 기록을 불러오는 코드 추가 (수정 모드일 경우)
+        if (intent.hasExtra("record_id")) {
+            val recordId = intent.getIntExtra("record_id", -1)
+            val record = dbHelper.getRecordById(recordId)
+            if (record != null) {
+                editTextTitle.setText(record.getAsString(RecordDatabaseHelper.COLUMN_TITLE))
+                editTextDate.setText(record.getAsString(RecordDatabaseHelper.COLUMN_DATE))
+                ratingBar.rating = record.getAsFloat(RecordDatabaseHelper.COLUMN_RATING)
+                editTextNote.setText(record.getAsString(RecordDatabaseHelper.COLUMN_NOTE))
+                checkBoxPrivate.isChecked = record.getAsInteger(RecordDatabaseHelper.COLUMN_PRIVATE) == 1
+            }
+        }
+
+
         saveButton.setOnClickListener {
             saveRecordToDatabase(
                 spinnerCategory.selectedItem.toString(),
@@ -248,6 +264,9 @@ class RecordRegistActivity : AppCompatActivity() {
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
 
             /*homeViewModel.loadRecords(dbHelper) // 데이터 갱신 로직 호출*/
+            // HomeFragment의 ViewModel에 기록 목록 갱신을 요청
+            homeViewModel.loadRecords(dbHelper, "DESC") // 기록을 최신순으로 로드
+
 
             // 저장된 데이터를 Intent에 담아서 전달
             val intent = Intent().apply {

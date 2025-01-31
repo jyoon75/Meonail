@@ -110,6 +110,7 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
                 put(COLUMN_TAGS, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TAGS)))
                 put(COLUMN_NOTE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOTE)))
                 put(COLUMN_IMAGES, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGES)))
+                put(COLUMN_DATE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)))
             }
         } else {
             null
@@ -183,6 +184,16 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         cursor.close()
         return records
     }
+
+
+    // 기록상세 수정 메뉴
+    fun deleteRecord(id: Int): Boolean {
+        val db = writableDatabase
+        val deletedRows = db.delete(TABLE_NAME, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        db.close()
+        return deletedRows > 0
+    }
+
 
 
 }

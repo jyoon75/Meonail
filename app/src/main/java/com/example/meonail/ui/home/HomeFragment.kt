@@ -73,46 +73,11 @@ class HomeFragment : Fragment() {
 
 
 
-        /*// 탭 설정
-        // 초기 데이터 로드 (전체 기록)
-        loadRecords("전체", "DESC")
 
-        // Spinner(정렬) 설정
-        binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val sortOrder = if (position == 0) "DESC" else "ASC"
-                val selectedCategory = binding.tabLayout.getTabAt(binding.tabLayout.selectedTabPosition)?.text.toString()
-                loadRecords(selectedCategory, sortOrder)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-        // TabLayout 설정
-        setupTabs()
-
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val category = tab?.text.toString()
-                val sortOrder = if (binding.spinnerSort.selectedItemPosition == 0) "DESC" else "ASC"
-                loadRecords(category, sortOrder)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })*/
         // 탭 설정 및 데이터 로드
         setupTabs()
 
-        /*binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val category = tab?.text.toString().substringBeforeLast(" (")
-                loadRecords(category, getSelectedSortOrder())
-            }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })*/
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val category = getSelectedCategory()
@@ -125,12 +90,7 @@ class HomeFragment : Fragment() {
         })
 
 
-        /*binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                loadRecords(getSelectedCategory(), getSelectedSortOrder())
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }*/
+
         binding.spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val sortOrder = getSelectedSortOrder()
@@ -214,20 +174,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    /*private fun loadRecords(category: String, sortOrder: String) {
-        val records = if (category == "전체") {
-            dbHelper.getAllRecords(sortOrder)
-        } else {
-            dbHelper.getRecordsByCategory(category, sortOrder)
-        }
-        adapter = RecordAdapter(records) { recordId ->
-            val intent = Intent(requireContext(), RecordInfoFragment::class.java).apply {
-                putExtra("record_id", recordId)
-            }
-            startActivity(intent)
-        }
-        binding.recyclerViewRecords.adapter = adapter
-    }*/
+
     private fun loadRecords(category: String, sortOrder: String) {
         val records = if (category == "전체") {
             dbHelper.getAllRecords(sortOrder)
