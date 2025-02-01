@@ -56,7 +56,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         val textViewNoteInfo = view.findViewById<TextView>(R.id.textViewNoteInfo)
         val textViewDateInfo = view.findViewById<TextView>(R.id.textViewDateInfo)
 
-        // 데이터베이스에서 기록 정보 불러오기
+        /*// 데이터베이스에서 기록 정보 불러오기
         recordId?.let {
             val record = databaseHelper.getRecordById(it)
             record?.let { data ->
@@ -113,9 +113,42 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
                 val recordDate = data.getAsString(RecordDatabaseHelper.COLUMN_DATE) // 날짜 가져오기
                 textViewDateInfo.text = "기록일: $recordDate"
             }
-        }
+        }*/
 
         return view
+    }
+
+
+    // 수정 후 기록 불러오기
+    override fun onResume() {
+        super.onResume()
+        loadRecordData()
+    }
+
+    // 수정 후 기록 불러오기 로딩 근데 이미지는 빠져있음
+    private fun loadRecordData() {
+        view?.let { view ->
+            val imageContainer = view.findViewById<LinearLayout>(R.id.imageContainer)
+            val textViewTitleInfo = view.findViewById<TextView>(R.id.textViewTitleInfo)
+            val ratingBarInfo = view.findViewById<RatingBar>(R.id.ratingBarInfo)
+            val textViewTagsInfo = view.findViewById<TextView>(R.id.textViewTagsInfo)
+            val textViewNoteInfo = view.findViewById<TextView>(R.id.textViewNoteInfo)
+            val textViewDateInfo = view.findViewById<TextView>(R.id.textViewDateInfo)
+
+            recordId?.let {
+                val record = databaseHelper.getRecordById(it)
+                record?.let { data ->
+                    textViewTitleInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_TITLE)
+                    ratingBarInfo.rating = data.getAsFloat(RecordDatabaseHelper.COLUMN_RATING)
+                    textViewTagsInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_TAGS)
+                        .split(",")
+                        .filter { it.isNotBlank() }
+                        .joinToString(" ") { "#$it" }
+                    textViewNoteInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_NOTE)
+                    textViewDateInfo.text = "기록일: ${data.getAsString(RecordDatabaseHelper.COLUMN_DATE)}"
+                }
+            }
+        }
     }
 
 

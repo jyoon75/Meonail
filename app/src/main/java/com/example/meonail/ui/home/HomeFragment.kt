@@ -38,6 +38,9 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loadRecords("전체", "DESC") // 홈 화면에서 데이터를 다시 불러오기
+
+        // 탭 업데이트
+        setupTabs()
     }
 
 
@@ -149,6 +152,18 @@ class HomeFragment : Fragment() {
 
     }
 
+
+    private fun loadRecords(category: String, sortOrder: String) {
+        val records = if (category == "전체") {
+            dbHelper.getAllRecords(sortOrder)
+        } else {
+            dbHelper.getRecordsByCategory(category, sortOrder)
+        }
+        homeViewModel.updateRecords(records)
+    }
+
+
+
     private fun setupTabs() {
         binding.tabLayout.removeAllTabs()
         val categories = dbHelper.getCategoriesWithCount()
@@ -164,14 +179,7 @@ class HomeFragment : Fragment() {
 
 
 
-    private fun loadRecords(category: String, sortOrder: String) {
-        val records = if (category == "전체") {
-            dbHelper.getAllRecords(sortOrder)
-        } else {
-            dbHelper.getRecordsByCategory(category, sortOrder)
-        }
-        homeViewModel.updateRecords(records)
-    }
+
 
 
     private fun getSelectedCategory(): String {
