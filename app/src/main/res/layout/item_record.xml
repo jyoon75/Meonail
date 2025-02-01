@@ -10,8 +10,8 @@
     <!-- 썸네일 -->
     <ImageView
         android:id="@+id/imageViewThumbnail"
-        android:layout_width="96dp"
-        android:layout_height="112dp"
+        android:layout_width="108dp"
+        android:layout_height="108dp"
         android:scaleType="centerCrop"
         android:background="@color/primary_ver1"
         android:contentDescription="썸네일 이미지" />

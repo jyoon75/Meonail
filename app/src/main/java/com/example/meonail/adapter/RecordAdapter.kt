@@ -61,22 +61,7 @@ class RecordAdapter(
         // 이미지 썸네일 설정 (Glide 사용)
         val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()
 
-        /*if (imageUris.isNotEmpty() && imageUris[0].isNotBlank()) {
-            val imagePath = imageUris[0].trim()
-            val uri = if (!imagePath.startsWith("content://") && !imagePath.startsWith("file://")) {
-                Uri.parse("file://$imagePath") // 로컬 파일 경로 처리
-            } else {
-                Uri.parse(imagePath)
-            }
 
-            Log.d("RecordAdapter", "Loading Image URI: $uri") // 디버깅 로그 추가
-
-            Glide.with(holder.imageViewThumbnail.context)
-                .load(uri)
-                .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략 설정
-                .placeholder(R.mipmap.ic_launcher) // 로딩 중 기본 이미지
-                .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
-                .into(holder.imageViewThumbnail)*/
         if (imageUris.isNotEmpty() && imageUris[0].isNotBlank()) {
             val imagePath = imageUris[0].trim()
             val uri = Uri.parse(imagePath)
@@ -104,19 +89,6 @@ class RecordAdapter(
         }
 
     }
-
-    /*private fun getRealPathFromURI(context: Context, uri: Uri): String? {
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndex("_data")
-                if (columnIndex != -1) {
-                    return it.getString(columnIndex) // 실제 파일 경로 반환
-                }
-            }
-        }
-        return null
-    }*/
 
 
     override fun getItemCount(): Int = records.size

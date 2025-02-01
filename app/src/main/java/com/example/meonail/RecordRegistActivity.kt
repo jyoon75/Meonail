@@ -106,6 +106,23 @@ class RecordRegistActivity : AppCompatActivity() {
                 editTextNote.setText(record.getAsString(RecordDatabaseHelper.COLUMN_NOTE))
                 checkBoxPrivate.isChecked = record.getAsInteger(RecordDatabaseHelper.COLUMN_PRIVATE) == 1
             }
+
+
+            // ✅ 태그 불러오기
+            val savedTags = record?.getAsString(RecordDatabaseHelper.COLUMN_TAGS)
+            if (!savedTags.isNullOrEmpty()) {
+                savedTags.split(",").forEach { tag ->
+                    addTagToContainer(tagContainer, tag.trim())
+                }
+            }
+
+            /*// ✅ 이미지 불러오기
+            val savedImages = record?.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)
+            if (!savedImages.isNullOrEmpty()) {
+                savedImages.split(",").forEach { uriString ->
+                    addImageToContainer(imageContainer, Uri.parse(uriString.trim()))
+                }
+            }*/
         }
 
 
