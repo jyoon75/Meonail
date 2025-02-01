@@ -9,7 +9,12 @@
         android:id="@+id/navigation_calendar"
         android:name="com.example.meonail.CalendarFragment"
         android:label="@string/title_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar">
+        <!-- 캘린더에서 상세 페이지로 가는 액션 추가 -->
+        <action
+            android:id="@+id/action_calendar_to_recordInfo"
+            app:destination="@id/recordInfoFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_memory"
