@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 배경 색상 설정 -->
+    <solid android:color="#FFFFFF" />  <!-- 원하는 배경 색상으로 변경 -->
+
+    <!-- 모서리 둥글기 설정 -->
+    <corners android:radius="16dp" /> <!-- 원하는 둥근 모서리 크기 설정 -->
+
+    <!-- 아웃라인 설정 -->
+    <stroke
+        android:color="@color/primary"
+        android:width="2dp" /> <!-- 아웃라인 두께 -->
+</shape>

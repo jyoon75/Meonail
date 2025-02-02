@@ -1,25 +1,25 @@
 package com.example.meonail
 
+import RecordDatabaseHelper
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.meonail.databinding.FragmentMemoryBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MemoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MemoryFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var binding: FragmentMemoryBinding
+    private lateinit var databaseHelper: RecordDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,19 +34,34 @@ class MemoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_memory, container, false)
+        binding = FragmentMemoryBinding.inflate(inflater, container, false)
+        databaseHelper = RecordDatabaseHelper(requireContext())
+
+        // 클릭 시 MemoryGalleryActivity로 이동
+        binding.layoutAllMemory.setOnClickListener { // 모든 기록
+            val type = "All"
+            val intent = Intent(requireContext(), MemoryGalleryActivity::class.java)
+            intent.putExtra("type", type) // 넘기려는 값을 Intent에 담아서 전달
+            startActivity(intent)
+        }
+        binding.layoutRatingFiveMemory.setOnClickListener { // 5.0점 기록
+            val type = "RatingFive"
+            val intent = Intent(requireContext(), MemoryGalleryActivity::class.java)
+            intent.putExtra("type", type) // 넘기려는 값을 Intent에 담아서 전달
+            startActivity(intent)
+        }
+        binding.layoutLongNoteMemory.setOnClickListener { // 노트가 긴 기록
+            val type = "LongNote"
+            val intent = Intent(requireContext(), MemoryGalleryActivity::class.java)
+            intent.putExtra("type", type) // 넘기려는 값을 Intent에 담아서 전달
+            startActivity(intent)
+        }
+
+
+        return binding.root
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MemoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             MemoryFragment().apply {
