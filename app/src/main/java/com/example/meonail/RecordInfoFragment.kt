@@ -58,64 +58,6 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         val textViewNoteInfo = view.findViewById<TextView>(R.id.textViewNoteInfo)
         val textViewDateInfo = view.findViewById<TextView>(R.id.textViewDateInfo)
 
-        /*// 데이터베이스에서 기록 정보 불러오기
-        recordId?.let {
-            val record = databaseHelper.getRecordById(it)
-            record?.let { data ->
-                // 제목
-                textViewTitleInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_TITLE)
-
-                // 별점
-                ratingBarInfo.rating = data.getAsFloat(RecordDatabaseHelper.COLUMN_RATING)
-
-                // 태그
-                val tags = data.getAsString(RecordDatabaseHelper.COLUMN_TAGS)
-                // 태그가 비어 있으면 #을 표시하지 않도록
-                if (tags.isNotEmpty()) {
-                    textViewTagsInfo.text = tags.split(",")
-                        .filter { it.isNotBlank() }  // 공백 태그 제거
-                        .joinToString(" ") { "#$it" }
-                } else {
-                    textViewTagsInfo.text = "" // 태그가 없으면 공백 처리
-                }
-
-                // 기록 내용
-                textViewNoteInfo.text = data.getAsString(RecordDatabaseHelper.COLUMN_NOTE)
-
-                /*// 이미지 설정
-                val imageUris = data.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",")
-                if (!imageUris.isNullOrEmpty()) {
-                    imageContainer.setImageURI(Uri.parse(imageUris[0]))
-                }*/
-                /*// 이미지 설정
-                val imageUris = data.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",")
-                if (!imageUris.isNullOrEmpty()) {
-                    imageUris.forEach { uri ->
-                        val imageView = ImageView(requireContext()).apply {
-                            *//*layoutParams = LinearLayout.LayoutParams(200, 200).apply {
-                                setMargins(8, 0, 8, 0) // 이미지 간격
-                            }
-                            setImageURI(Uri.parse(uri))
-                            scaleType = ImageView.ScaleType.CENTER_CROP*//*
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,  // 가로 크기: 원래 이미지 크기
-                                LinearLayout.LayoutParams.WRAP_CONTENT   // 세로 크기: 원래 이미지 크기
-                            ).apply {
-                                setMargins(8, 0, 8, 0) // 이미지 간격
-                            }
-                            setImageURI(Uri.parse(uri)) // URI를 사용해 이미지 설정
-                            scaleType = ImageView.ScaleType.FIT_CENTER // 이미지를 중앙에 맞춤 (필요 시 제거 가능)
-                            adjustViewBounds = true // 이미지가 원래 비율로 유지되도록 설정
-                        }
-                        imageContainer.addView(imageView) // 이미지 추가
-                    }
-                }*/
-
-                // 기록 날짜
-                val recordDate = data.getAsString(RecordDatabaseHelper.COLUMN_DATE) // 날짜 가져오기
-                textViewDateInfo.text = "기록일: $recordDate"
-            }
-        }*/
 
         return view
     }
@@ -127,7 +69,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
         loadRecordData()
     }
 
-    // 수정 후 기록 불러오기 로딩 근데 이미지는 빠져있음
+    // 수정 후 기록 불러오기
     private fun loadRecordData() {
         view?.let { view ->
             val imageContainer = view.findViewById<LinearLayout>(R.id.imageContainer)

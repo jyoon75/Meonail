@@ -7,10 +7,8 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -119,13 +117,6 @@ class RecordRegistActivity : AppCompatActivity() {
                 }
             }
 
-            /*// ✅ 이미지 불러오기
-            val savedImages = record?.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)
-            if (!savedImages.isNullOrEmpty()) {
-                savedImages.split(",").forEach { uriString ->
-                    addImageToContainer(imageContainer, Uri.parse(uriString.trim()))
-                }
-            }*/
         }
 
 

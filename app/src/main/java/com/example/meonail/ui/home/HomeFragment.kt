@@ -123,8 +123,6 @@ class HomeFragment : Fragment() {
             binding.recyclerViewRecords.adapter = adapter
         }
 
-        /*val intent = Intent(requireContext(), RecordRegistActivity::class.java)
-        recordRegistLauncher.launch(intent)*/
 
         // Spinner의 아이템 선택에 따라 정렬 방식 처리
         val spinnerSort = binding.spinnerSort
@@ -136,7 +134,6 @@ class HomeFragment : Fragment() {
                     else -> "DESC"
                 }
                 // 데이터 로드
-                /*homeViewModel.loadRecords(dbHelper, sortOrder)*/
                 loadRecords(getSelectedCategory(), sortOrder)
             }
 
