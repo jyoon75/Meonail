@@ -72,78 +72,49 @@ class  MainActivity : AppCompatActivity() {
     private fun setupListeners() {
         // 버튼 클릭 시 액션 설정
         binding.btnRecordRegist.setOnClickListener {
-            if (!checkPermission()) { // 권한 체크
-                // 권한이 있을 경우 RecordRegistActivity로 이동
-                val intent = Intent(this, RecordRegistActivity::class.java)
-                startActivity(intent)
-            }
-        }
-    }
+            val readImagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                android.Manifest.permission.READ_MEDIA_IMAGES
+            else
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
 
-    /**
-     * 권한 체크 로직
-     * 외부 저장소/미디어 접근 권한을 확인하고, 필요하면 요청
-     */
-    private fun checkPermission(): Boolean {
-        val readImagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            android.Manifest.permission.READ_MEDIA_IMAGES
-        else
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-
-        // 권한이 없는 경우
-        if (ContextCompat.checkSelfPermission(this, readImagePermission) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, readImagePermission)) {
-                // 권한 설명 대화상자를 보여줌
-                val dlg = AlertDialog.Builder(this)
-                dlg.setTitle("미디어 접근 권한")
-                dlg.setMessage("사진 정보를 얻기 위해서는 외부 저장소 권한이 필요합니다.")
-                dlg.setPositiveButton("확인") { _, _ ->
+            // 권한이 없는 경우
+            if (ContextCompat.checkSelfPermission(this, readImagePermission) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, readImagePermission)) {
+                    // 권한 설명 대화상자를 보여줌
+                    val dlg = AlertDialog.Builder(this)
+                    dlg.setTitle("미디어 접근 권한")
+                    dlg.setMessage("사진 정보를 얻기 위해서는 외부 저장소 권한이 필요합니다.")
+                    dlg.setPositiveButton("확인") { dialog, which ->
+                        ActivityCompat.requestPermissions(
+                            this@MainActivity,
+                            arrayOf(readImagePermission),
+                            REQUEST_READ_EXTERNAL_STORAGE
+                        )
+                    }
+                    dlg.setNegativeButton("취소", null)
+                    dlg.show()
+                } else {
+                    // 권한 요청
                     ActivityCompat.requestPermissions(
                         this@MainActivity,
                         arrayOf(readImagePermission),
                         REQUEST_READ_EXTERNAL_STORAGE
                     )
                 }
-                dlg.setNegativeButton("취소", null)
-                dlg.show()
+
             } else {
-                // 권한 요청
-                ActivityCompat.requestPermissions(
-                    this@MainActivity,
-                    arrayOf(readImagePermission),
-                    REQUEST_READ_EXTERNAL_STORAGE
-                )
+                // 권한이 있을 경우 RecordRegistActivity로 이동
+                val intent = Intent(this, RecordRegistActivity::class.java)
+                startActivity(intent)
             }
-            return false
+
         }
-        return true // 권한이 이미 허용된 상태
     }
 
     companion object {
         private const val REQUEST_READ_EXTERNAL_STORAGE = 1000 // 권한 요청 코드
     }
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 권한 허용됨
-                Log.d("MainActivity", "권한 허용됨")
-                // 권한이 허용되었으므로 RecordRegistActivity로 이동
-                val intent = Intent(this, RecordRegistActivity::class.java)
-                startActivity(intent)
-            } else {
-                // 권한 거부됨
-                Log.d("MainActivity", "권한 거부됨")
-                // 권한이 없으면 적절한 처리를 할 수 있도록 사용자에게 알림
-                Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
 }
 
