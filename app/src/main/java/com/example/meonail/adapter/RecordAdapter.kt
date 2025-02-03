@@ -75,7 +75,7 @@ class RecordAdapter(
                 .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
                 .into(holder.imageViewThumbnail)
         } else {
-            holder.imageViewThumbnail.setImageResource(R.drawable.ic_favorite_filled) // 이미지 없을 때 기본 이미지
+            holder.imageViewThumbnail.setImageResource(R.drawable.default_background_image) // 이미지 없을 때 기본 이미지
         }
 
 

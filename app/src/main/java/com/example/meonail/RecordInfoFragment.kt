@@ -121,6 +121,25 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
                             imageContainer.addView(imageView) // 컨테이너에 이미지 추가
                         }
+                    } else {
+                        // 이미지가 없으면 기본 이미지 추가
+                        val imageView = ImageView(requireContext()).apply {
+                            layoutParams = LinearLayout.LayoutParams(
+                                400, // 가로 크기
+                                400  // 세로 크기
+                            ).apply {
+                                setMargins(16, 8, 16, 8) // 이미지 간격 추가
+                            }
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }
+
+                        // 기본 이미지 로드
+                        Glide.with(requireContext())
+                            .load(R.drawable.default_background_image) // 기본 이미지 로드
+                            .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략
+                            .into(imageView)
+
+                        imageContainer.addView(imageView) // 컨테이너에 기본 이미지 추가
                     }
                 }
             }
