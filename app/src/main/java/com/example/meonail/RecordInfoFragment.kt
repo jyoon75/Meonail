@@ -150,10 +150,15 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
                     textViewDateInfo.text = "기록일: ${data.getAsString(RecordDatabaseHelper.COLUMN_DATE)}"
 
 
-                    /*// 이미지 로드
-                    val imageUris = data.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()*/
-                    // 이미지 썸네일 설정 (Glide 사용)
-                    val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()
+
+                    /*// 이미지 썸네일 설정 (Glide 사용)
+                    val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()*/
+                    // 이미지 URI 리스트 가져오기
+                    val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)
+                        ?.split(",")
+                        ?.map { it.trim() }
+                        ?.filter { it.isNotBlank() }
+                        ?: listOf()
 
                     // 기존 이미지 제거 후 추가
                     imageContainer.removeAllViews()
