@@ -167,6 +167,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
                         val imagePath = imageUris[0].trim()
                         val uri = Uri.parse(imagePath)
 
+
                         imageUris.forEach { uriString ->
                             val imageView = ImageView(requireContext()).apply {
                                 layoutParams = LinearLayout.LayoutParams(
@@ -180,7 +181,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
                             // Glide를 사용하여 이미지 로드
                             Glide.with(requireContext())
-                                .load(uri) // content:// URI 직접 로드
+                                .load(Uri.parse(uriString.trim())) // 각 이미지 URI를 개별적으로 로드
                                 .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략
                                 .placeholder(R.mipmap.ic_launcher) // 로딩 중 이미지
                                 .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
@@ -188,6 +189,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
                             imageContainer.addView(imageView) // 컨테이너에 이미지 추가
                         }
+
                     }
                 }
             }
