@@ -2,13 +2,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <!-- 상단 드롭다운 메뉴 -->
         <Spinner
@@ -48,7 +48,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <Button
@@ -71,7 +71,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:gravity="center|left"
             android:orientation="horizontal">
 
@@ -100,7 +100,7 @@
             android:id="@+id/btnAddImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="사진 추가" />
 
         <HorizontalScrollView
@@ -124,7 +124,7 @@
             android:id="@+id/editTextNote"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:gravity="top|start"
             android:hint="감상 기록"
             android:scrollbars="vertical"
@@ -139,7 +139,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <CheckBox

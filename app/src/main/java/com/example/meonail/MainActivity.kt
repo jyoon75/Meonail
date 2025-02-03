@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -121,6 +122,29 @@ class  MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_READ_EXTERNAL_STORAGE = 1000 // 권한 요청 코드
     }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한 허용됨
+                Log.d("MainActivity", "권한 허용됨")
+                // 권한이 허용되었으므로 RecordRegistActivity로 이동
+                val intent = Intent(this, RecordRegistActivity::class.java)
+                startActivity(intent)
+            } else {
+                // 권한 거부됨
+                Log.d("MainActivity", "권한 거부됨")
+                // 권한이 없으면 적절한 처리를 할 수 있도록 사용자에게 알림
+                Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }
 
 

@@ -11,5 +11,7 @@
     <color name="primary_ver1">#FF6FA3D4</color>
     <color name="primary_ver2">#FF102458</color>
     <color name="background">#FFF2F2F0</color>
+    <color name="gray_line">#FFBBBBBB</color>
+    <color name="gray_text">#FF666666</color>
     <color name="text">#FF0D0D0D</color>
 </resources>

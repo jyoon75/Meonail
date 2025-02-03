@@ -22,6 +22,9 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="1dp"
+            android:layout_marginBottom="16dp"
             app:tabMode="scrollable" />
 
         <!-- Dropdown or Spinner for sorting -->
@@ -38,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="8dp" />
+            android:padding="16dp" />
 
     </LinearLayout>
 

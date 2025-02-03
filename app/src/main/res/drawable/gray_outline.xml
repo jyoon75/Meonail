@@ -8,6 +8,6 @@
 
     <!-- 아웃라인 설정 -->
     <stroke
-        android:color="@color/primary"
+        android:color="@color/gray_line"
         android:width="2dp" /> <!-- 아웃라인 두께 -->
 </shape>

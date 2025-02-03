@@ -34,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="12sp"
+                android:textColor="@color/gray_text"
                 android:text="무작위로 펼쳐진 그동안의 기록을 따라가봅니다." />
         </LinearLayout>
     </LinearLayout>
@@ -65,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="12sp"
+                android:textColor="@color/gray_text"
                 android:text="당신에게 만점이었던 이야기입니다." />
         </LinearLayout>
     </LinearLayout>
@@ -96,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="12sp"
+                android:textColor="@color/gray_text"
                 android:text="당신에게 특히 많은 감상을 남긴 이야기입니다." />
         </LinearLayout>
     </LinearLayout>
