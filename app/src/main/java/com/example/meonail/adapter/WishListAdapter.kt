@@ -34,7 +34,7 @@ class WishListAdapter(
     }
 
     fun updateData(newItems: List<WishItem>) {
-        Log.d("WISH_LIST_UPDATE", "업데이트할 아이템 개수: ${newItems.size}")  // 🔥 데이터 개수 로그 추가
+        Log.d("WISH_LIST_UPDATE", "업데이트할 아이템 개수: ${newItems.size}")
 
         wishItems.clear()
         wishItems.addAll(newItems)

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 🔥 로딩 메시지 -->
+    <!-- 🔹 로딩 메시지 -->
     <TextView
         android:id="@+id/txtLoading"
         android:layout_width="wrap_content"

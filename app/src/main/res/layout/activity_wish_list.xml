@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- 🔹 찜한 공연이 없을 때 표시할 텍스트 -->
+    <!-- 🔹 찜한 컨텐츠가 없을 때 표시할 텍스트 -->
     <TextView
         android:id="@+id/txtEmptyWishList"
         android:layout_width="match_parent"

@@ -39,7 +39,6 @@ class WishFragment : Fragment() {
         rvWishList.layoutManager = LinearLayoutManager(requireContext())
         rvWishList.adapter = wishListAdapter
 
-        // 로딩 시작
         txtLoading.visibility = View.VISIBLE
         rvWishList.visibility = View.GONE
 
@@ -58,7 +57,7 @@ class WishFragment : Fragment() {
     private fun fetchWishListData() {
         val apiService = RetrofitClient.instance
 
-        // 🔥 로딩 메시지 표시
+        // 로딩 메시지 표시
         txtLoading.visibility = View.VISIBLE
         rvWishList.visibility = View.GONE
 

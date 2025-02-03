@@ -37,7 +37,7 @@ class WishListActivity : AppCompatActivity() {
         loadWishList()
     }
 
-    // ✅ 🔥 뒤로 가기 버튼이 눌렸을 때 실행
+    // ✅ 뒤로 가기 버튼이 눌렸을 때 실행
     override fun onSupportNavigateUp(): Boolean {
         finish() // 현재 액티비티 종료
         return true
@@ -65,7 +65,7 @@ class WishListActivity : AppCompatActivity() {
             val intent = Intent(this, WishDetailActivity::class.java).apply {
                 putExtra("wishItem", wishItem) // 🔥 선택한 아이템 전달
             }
-            startActivity(intent) // 🔥 상세 페이지로 이동
+            startActivity(intent) // 상세 페이지로 이동
         }
     }
 }
