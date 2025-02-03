@@ -26,13 +26,28 @@
         <item name="android:paddingBottom">0dp</item>
     </style>
 
+    <!-- 버튼 기본 스타일 -->
+    <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
+
+        <item name="android:background">@drawable/gray_outline</item>
+
+        <item name="android:textColor">@color/black</item>
+
+        <!-- 버튼 폰트 -->
+        <item name="android:fontFamily">@CustomTextStyle</item>
+
+        <!-- 버튼의 텍스트 크기 -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
 
     <!-- 앱 전체에 적용할 기본 스타일 -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- 텍스트 스타일 적용-->
         <item name="android:textViewStyle">@style/CustomTextStyle</item>
         <item name="android:buttonStyle">@style/CustomButtonStyle</item>
-        <item name="android:editTextStyle">@style/CustomTextStyle</item>
+        <item name="android:editTextStyle">@style/CustomEditTextStyle</item>
 
         <!-- 액션바 배경 색상 -->
         <item name="colorPrimary">@color/primary_ver2</item>
