@@ -7,8 +7,10 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -24,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import java.io.File
 import java.util.*
 
 class RecordRegistActivity : AppCompatActivity() {
@@ -225,7 +228,7 @@ class RecordRegistActivity : AppCompatActivity() {
             layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
             setImageURI(imageUri)
             scaleType = ImageView.ScaleType.CENTER_CROP
-            tag = imageUri.toString() // URI를 태그로 설정
+            tag = getRealPathFromURI(imageUri).toString() // URI를 태그로 설정
         }
 
         // 삭제 버튼
@@ -351,4 +354,18 @@ class RecordRegistActivity : AppCompatActivity() {
         findViewById<CheckBox>(R.id.checkBoxPrivate).isChecked = false
     }
 
+    fun getRealPathFromURI(uri: Uri): Uri? {
+        val contentResolver = this.contentResolver
+        val projection = arrayOf("_data")  // 실제 파일 경로 가져오기
+
+        contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            val columnIndex = cursor.getColumnIndexOrThrow("_data")
+            if (cursor.moveToFirst()) {
+                val filePath = cursor.getString(columnIndex)
+                return Uri.fromFile(File(filePath))
+            }
+        }
+        return null
+
+    }
 }
