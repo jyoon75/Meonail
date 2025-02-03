@@ -4,8 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -28,9 +26,6 @@ class  MainActivity : AppCompatActivity() {
         // SessionManager를 사용하여 로그인 상태 확인
         val sessionManager = SessionManager(this)
         val isLoggedIn = sessionManager.isLoggedIn()
-
-        // 로그로 현재 로그인 상태 출력 (디버깅용)
-        Log.d("MainActivity", "로그인 상태: $isLoggedIn")
 
         if (!isLoggedIn) {
             // 로그인 상태가 아니면 LoginActivity로 이동
