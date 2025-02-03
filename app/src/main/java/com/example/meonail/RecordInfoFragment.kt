@@ -151,23 +151,13 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
 
 
-                    /*// 이미지 썸네일 설정 (Glide 사용)
-                    val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()*/
-                    // 이미지 URI 리스트 가져오기
-                    val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)
-                        ?.split(",")
-                        ?.map { it.trim() }
-                        ?.filter { it.isNotBlank() }
-                        ?: listOf()
+                    // 이미지 썸네일 설정 (Glide 사용)
+                    val imageUris = record.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)?.split(",") ?: listOf()
 
                     // 기존 이미지 제거 후 추가
                     imageContainer.removeAllViews()
 
                     if (imageUris.isNotEmpty() && imageUris[0].isNotBlank()) {
-                        val imagePath = imageUris[0].trim()
-                        val uri = Uri.parse(imagePath)
-
-
                         imageUris.forEach { uriString ->
                             val imageView = ImageView(requireContext()).apply {
                                 layoutParams = LinearLayout.LayoutParams(
@@ -181,7 +171,7 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
                             // Glide를 사용하여 이미지 로드
                             Glide.with(requireContext())
-                                .load(Uri.parse(uriString.trim())) // 각 이미지 URI를 개별적으로 로드
+                                .load(Uri.parse(uriString)) // content:// URI 직접 로드
                                 .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략
                                 .placeholder(R.mipmap.ic_launcher) // 로딩 중 이미지
                                 .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
@@ -189,7 +179,6 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
 
                             imageContainer.addView(imageView) // 컨테이너에 이미지 추가
                         }
-
                     }
                 }
             }
