@@ -26,17 +26,15 @@
         <item name="android:paddingBottom">0dp</item>
     </style>
 
-    <!-- 버튼 기본 스타일 -->
+    <!-- 텍스트 입력 기본 스타일 -->
     <style name="CustomEditTextStyle" parent="Widget.AppCompat.EditText">
 
         <item name="android:background">@drawable/gray_outline</item>
 
         <item name="android:textColor">@color/black</item>
 
-        <!-- 버튼 폰트 -->
         <item name="android:fontFamily">@CustomTextStyle</item>
 
-        <!-- 버튼의 텍스트 크기 -->
         <item name="android:textSize">16sp</item>
         <item name="android:padding">16dp</item>
     </style>
