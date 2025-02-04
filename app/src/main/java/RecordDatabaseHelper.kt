@@ -204,6 +204,7 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
                 put(COLUMN_NOTE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOTE)))
                 put(COLUMN_IMAGES, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGES)))
                 put(COLUMN_DATE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)))
+                put(COLUMN_PRIVATE, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PRIVATE)))
             }
         } else {
             null
