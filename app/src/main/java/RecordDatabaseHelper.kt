@@ -152,12 +152,12 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         cursor.close()
         return records
     }
-    fun getRecordsWithNoteLengthGreaterThan(): List<ContentValues> { // 노트의 길이가 100 이상인 레코드만 가져옴
+    fun getRecordsWithNoteLengthGreaterThan(): List<ContentValues> { // 노트의 길이가 500 이상인 기록만 가져옴
         val records = mutableListOf<ContentValues>()
         val db = readableDatabase
 
         val cursor = db.rawQuery(
-            "SELECT * FROM $TABLE_NAME WHERE LENGTH($COLUMN_NOTE) >= 100", null
+            "SELECT * FROM $TABLE_NAME WHERE LENGTH($COLUMN_NOTE) >= 500", null
         )
 
         if (cursor.moveToFirst()) {

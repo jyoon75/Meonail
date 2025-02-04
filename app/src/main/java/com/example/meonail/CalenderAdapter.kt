@@ -30,13 +30,13 @@ class CalenderAdapter(private val context: Context,
 
     // CalendarViewHolder 클래스 정의
     inner class CalendarViewHolder(val binding: ItemDayBinding) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        var isInMonth: Boolean = false //해당 날짜가 현재 월에 속하는지
+        var isInMonth: Boolean = false // 해당 날짜가 현재 월에 속하는지
 
         init {
             binding.root.setOnClickListener(this)
         }
 
-        //날짜가 클릭될 때 호출
+        // 날짜가 클릭될 때 호출
         override fun onClick(view: View?) {
             mClickListener?.onItemClick(view, binding.txtvDate.text.toString(), isInMonth)
         }
@@ -61,7 +61,7 @@ class CalenderAdapter(private val context: Context,
             holder.isInMonth = currentDate.inMonth // CalenderDay의 inMonth 값으로 설정
 
             if (!currentDate.inMonth) {
-                txtvDate.setTextColor(context.getColor(R.color.primary_ver1))  // 예: 다른 색으로 표시
+                txtvDate.setTextColor(context.getColor(R.color.primary_ver1))
             } else {
                 txtvDate.setTextColor(context.getColor(R.color.black)) // 기본 색상
             }
@@ -71,41 +71,15 @@ class CalenderAdapter(private val context: Context,
                 txtvDate.setTextColor(context.getColor(R.color.white))
                 txtvDate.setShadowLayer(4F, 0F, 2F, R.color.primary_ver2)
 
-                val imagePath = it.trim()
-                val uri = Uri.parse(imagePath)
-
-                Log.d("RecordAdapter", "Loading Image URI: $uri") // 디버깅 로그 추가
+                Log.d("RecordAdapter", "Loading Image URI: $it") // 디버깅 로그 추가
 
                 Glide.with(context)
-                    .load(uri) // content:// URI 직접 로드
+                    .load(it) // content:// URI 직접 로드
                     .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략
-                    .placeholder(R.mipmap.ic_launcher) // 로딩 중 기본 이미지
-                    .error(R.drawable.ic_launcher_background) // 실패 시 기본 이미지
+                    .placeholder(R.drawable.default_calendar_background_image) // 로딩 중 기본 이미지
+                    .error(R.drawable.default_calendar_background_image) // 실패 시 기본 이미지(이미지가 빈 기록 포함)
                     .into(imgDate)
             }
-        }
-    }
-
-    private fun getBitmapFromUri(uri: String): Bitmap? {
-        return try {
-            // URI에서 InputStream을 가져온다
-            val inputStream: InputStream? = context.contentResolver.openInputStream(Uri.parse(uri))
-            if (inputStream != null) {
-                // InputStream을 사용해 Bitmap 객체로 변환
-                BitmapFactory.decodeStream(inputStream)
-            } else {
-                // InputStream이 null인 경우
-                throw FileNotFoundException("InputStream is null for URI: $uri")
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-            null
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
         }
     }
 

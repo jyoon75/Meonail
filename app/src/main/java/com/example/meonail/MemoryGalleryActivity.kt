@@ -51,16 +51,15 @@ class MemoryGalleryActivity : AppCompatActivity() {
         // Intent에서 type 값 가져오기
         val type = intent.getStringExtra("type") ?: ""
 
-        // 해당 type에 맞는 레코드를 가져오기
+        // 해당 type에 맞는 기록 가져오기
         if (type == "All") {
-            records = databaseHelper.getAllRecords()
+            records = databaseHelper.getAllRecords() //모든 기록 가져오기
         }
         else if (type == "RatingFive") {
-            records = databaseHelper.getAllRecordsWithRatingFive()
+            records = databaseHelper.getAllRecordsWithRatingFive() //평점 5.0인 기록 가져오기
         }
         else if (type == "LongNote") {
-            records = databaseHelper.getRecordsWithNoteLengthGreaterThan()
-            //Log.e("AAAAAAA", databaseHelper.getTest("4").length.toString())
+            records = databaseHelper.getRecordsWithNoteLengthGreaterThan() //500자 이상인 기록 가져오기
         }
 
         // records가 비어 있으면, 사용자에게 알리고 종료
