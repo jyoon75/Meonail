@@ -25,6 +25,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // 액션바 제목 설정
+        supportActionBar?.title = "Meonail"
+
         // ViewBinding 초기화
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)

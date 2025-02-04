@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import java.io.File
 import java.util.*
 
@@ -70,11 +71,19 @@ class RecordRegistActivity : AppCompatActivity() {
                     // 여러 개 선택된 경우
                     for (i in 0 until clipData.itemCount) {
                         val uri = clipData.getItemAt(i).uri
-                        addImageToContainer(recordImageContainer, uri)
+                        getRealPathFromURI(uri)?.let {
+                            addImageToContainer(recordImageContainer,
+                                it
+                            )
+                        }
                     }
                 } else if (selectedImageUri != null) {
                     // 한 개만 선택된 경우
-                    addImageToContainer(recordImageContainer, selectedImageUri)
+                    getRealPathFromURI(selectedImageUri)?.let {
+                        addImageToContainer(recordImageContainer,
+                            it
+                        )
+                    }
                 }
             }
         }
@@ -118,12 +127,19 @@ class RecordRegistActivity : AppCompatActivity() {
                 }
             }
 
-
             // ✅ 태그 불러오기
             val savedTags = record?.getAsString(RecordDatabaseHelper.COLUMN_TAGS)
             if (!savedTags.isNullOrEmpty()) {
                 savedTags.split(",").forEach { tag ->
                     addTagToContainer(tagContainer, tag.trim())
+                }
+            }
+
+            // 이미지 불러오기
+            val savedImages = record?.getAsString(RecordDatabaseHelper.COLUMN_IMAGES)
+            if (!savedImages.isNullOrEmpty()) {
+                savedImages.split(",").forEach { image ->
+                    addImageToContainer(imageContainer, image.trim().toUri())
                 }
             }
 
@@ -229,7 +245,7 @@ class RecordRegistActivity : AppCompatActivity() {
             layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
             setImageURI(imageUri)
             scaleType = ImageView.ScaleType.CENTER_CROP
-            tag = getRealPathFromURI(imageUri).toString() // URI를 태그로 설정
+            tag = imageUri.toString() // URI를 태그로 설정
         }
 
         // 삭제 버튼

@@ -115,8 +115,8 @@ class RecordInfoFragment : Fragment(R.layout.fragment_record_info) {
                             Glide.with(requireContext())
                                 .load(Uri.parse(uriString)) // content:// URI 직접 로드
                                 .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략
-                                .placeholder(R.mipmap.ic_launcher) // 로딩 중 이미지
-                                .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
+                                .placeholder(R.drawable.default_background_image) // 로딩 중 이미지
+                                .error(R.drawable.default_background_image) // 실패 시 기본 이미지
                                 .into(imageView)
 
                             imageContainer.addView(imageView) // 컨테이너에 이미지 추가

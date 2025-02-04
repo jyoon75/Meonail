@@ -71,8 +71,8 @@ class RecordAdapter(
             Glide.with(holder.imageViewThumbnail.context)
                 .load(uri) // content:// URI 직접 로드
                 .diskCacheStrategy(DiskCacheStrategy.ALL) // 캐싱 전략
-                .placeholder(R.mipmap.ic_launcher) // 로딩 중 기본 이미지
-                .error(R.drawable.ic_dashboard_black_24dp) // 실패 시 기본 이미지
+                .placeholder(R.drawable.default_background_image) // 로딩 중 기본 이미지
+                .error(R.drawable.default_background_image) // 실패 시 기본 이미지
                 .into(holder.imageViewThumbnail)
         } else {
             holder.imageViewThumbnail.setImageResource(R.drawable.default_background_image) // 이미지 없을 때 기본 이미지
