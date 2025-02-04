@@ -197,6 +197,7 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
         val record = if (cursor.moveToFirst()) {
             ContentValues().apply {
                 put(COLUMN_ID, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
+                put(COLUMN_CATEGORY, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)))
                 put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)))
                 put(COLUMN_RATING, cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_RATING)))
                 put(COLUMN_TAGS, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TAGS)))
@@ -259,6 +260,7 @@ class RecordDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABAS
             do {
                 val record = ContentValues().apply {
                     put(COLUMN_ID, cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
+                    put(COLUMN_CATEGORY, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY)))
                     put(COLUMN_TITLE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)))
                     put(COLUMN_DATE, cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)))
                     put(COLUMN_RATING, cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_RATING)))

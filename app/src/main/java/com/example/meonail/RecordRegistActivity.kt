@@ -106,6 +106,16 @@ class RecordRegistActivity : AppCompatActivity() {
                 ratingBar.rating = record.getAsFloat(RecordDatabaseHelper.COLUMN_RATING)
                 editTextNote.setText(record.getAsString(RecordDatabaseHelper.COLUMN_NOTE))
                 checkBoxPrivate.isChecked = record.getAsInteger(RecordDatabaseHelper.COLUMN_PRIVATE) == 1
+
+                // ✅ 카테고리 불러오기 & 설정
+                val categoryFromDB = record.getAsString(RecordDatabaseHelper.COLUMN_CATEGORY)
+                val categoryAdapter = spinnerCategory.adapter
+                for (i in 0 until categoryAdapter.count) {
+                    if (categoryAdapter.getItem(i).toString() == categoryFromDB) {
+                        spinnerCategory.setSelection(i) // DB 값과 같은 카테고리 선택
+                        break
+                    }
+                }
             }
 
 
