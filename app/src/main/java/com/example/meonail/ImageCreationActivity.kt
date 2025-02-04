@@ -10,6 +10,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,7 @@ class ImageCreationActivity : AppCompatActivity() {
 
         // ✅ 액션바에 뒤로 가기 버튼 추가
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "이미지 생성하기"
 
         // 🔥 API 33 이상 (Android 13 이상)에서도 정상 동작하도록 설정
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -42,13 +44,14 @@ class ImageCreationActivity : AppCompatActivity() {
             }
         })
 
-
-
-
         imgPoster = findViewById(R.id.imgGeneratedImage)
         editText = findViewById(R.id.editTextOverlay)
         btnGenerateImage = findViewById(R.id.btnGenerateImage)
         btnSave = findViewById(R.id.btnSave)
+
+        btnGenerateImage.visibility = View.VISIBLE
+        btnSave.visibility = View.GONE
+        editText.visibility = View.VISIBLE
 
         val wishItem = intent.getParcelableExtra<WishItem>("wishItem")
 
@@ -63,6 +66,9 @@ class ImageCreationActivity : AppCompatActivity() {
             val textOverlay = editText.text.toString() // 🔥 사용자가 입력한 텍스트 가져오기
             generatedBitmap = createCustomImage(imgPoster, textOverlay) // ✅ 폴라로이드 스타일 적용
             imgPoster.setImageBitmap(generatedBitmap) // ✅ 이미지 업데이트
+            btnGenerateImage.visibility = View.GONE
+            btnSave.visibility = View.VISIBLE
+            editText.visibility = View.GONE
         }
 
         // 💾 저장 버튼 클릭 시

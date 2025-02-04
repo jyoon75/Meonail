@@ -4,19 +4,11 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/txtImageTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="이미지 제작"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
-
     <ImageView
         android:id="@+id/imgGeneratedImage"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"/>
 
@@ -24,7 +16,8 @@
         android:id="@+id/editTextOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="텍스트 입력 (선택사항)"
+        android:layout_marginTop="16dp"
+        android:hint="이미지와 함께 저정할 문구를 적어주세요(선택)"
         android:padding="8dp"
         android:background="@android:drawable/editbox_background"/>
 
@@ -46,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="저장"
+            android:visibility="gone"
             android:layout_margin="15dp"/>
 
     </LinearLayout>

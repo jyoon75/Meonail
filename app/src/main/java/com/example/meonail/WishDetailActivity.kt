@@ -25,6 +25,7 @@ class WishDetailActivity : AppCompatActivity() {
 
         // ✅ 액션바에 뒤로 가기 버튼 추가
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "정보 상세보기"
 
         imgPoster = findViewById(R.id.imgWishPoster)
         txtTitle = findViewById(R.id.txtWishTitle)

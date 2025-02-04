@@ -9,10 +9,11 @@
         android:id="@+id/txtLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="\n\n\n\n\n\n\n\n정보를 가져오는 중입니다.\n조금만 기다려주세요."
+        android:text="\n\n\n\n정보를 가져오는 중입니다.\n조금만 기다려주세요."
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
+        android:lineSpacingMultiplier="1.5"
         android:gravity="center"
         android:layout_gravity="center"
         android:visibility="gone"/>
